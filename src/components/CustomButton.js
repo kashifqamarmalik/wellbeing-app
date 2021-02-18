@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#ffffff',
         fontSize: 18,
-    }
-})
+    },
+});
 
 export default CustomButton;
