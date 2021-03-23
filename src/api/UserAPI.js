@@ -41,7 +41,7 @@ const UserAPI = () => {
             let form = new URLSearchParams();
             user.forEach(it => form.append(it, user[it]));
             let res = await fetch(url + '/user', {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
