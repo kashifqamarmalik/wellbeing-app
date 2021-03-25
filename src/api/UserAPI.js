@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {URLSearchParams} from 'react-native/Libraries/Blob/URL';
+import stringifySafe from "react-native/Libraries/Utilities/stringifySafe";
 
 let config = require('../config.js');
 
@@ -14,10 +15,10 @@ const UserAPI = () => {
             if (res.ok) {
                 return await res.json();
             } else {
-              throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
     };
 
@@ -26,36 +27,40 @@ const UserAPI = () => {
             let res = await fetch(url + '/find-id/?id=' + id, {
                 method: 'GET',
             });
+
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
     };
 
     const createNewUser = async (user) => {
+        if (user === undefined || user.username === undefined) {
+            throw new Error('No valid user passed to createNewUser().');
+        }
         try {
             let form = new URLSearchParams();
-            user.forEach(it => form.append(it, user[it]));
+            Object.keys(user).forEach(it => {
+                form.append(it, user[it]);
+            });
             let res = await fetch(url + '/user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: {
-                    form,
-                },
+                body: form,
             });
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
     };
 
@@ -67,10 +72,10 @@ const UserAPI = () => {
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
 
     };
