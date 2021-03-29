@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
 
+import {URLSearchParams} from "react-native/Libraries/Blob/URL";
+
 let config = require('../config.js');
 
 const url = `http://${config.testing.ip}:${config.testing.port}/api`;
@@ -8,40 +10,43 @@ const AssessmentAPI = () => {
 
     const getBasicAssessment = async () => {
         try {
-            let res = await fetch(url + '/assessmnent/basic', {
+            let res = await fetch(url + '/assessment/basic', {
                 method: 'GET',
             });
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' + res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' + e);
+            throw new Error(e);
         }
     };
 
     const putCompletedAssessment = async (assessment) => {
+        if (assessment === undefined || assessment.user_id === undefined || assessment.assessment_id === undefined) {
+            throw new Error('No valid assessment passed to putCompletedAssessment().');
+        }
         try {
             let form = new URLSearchParams();
-            assessment.forEach(it => form.append(it, assessment[it]));
+            Object.keys(assessment).forEach(it => {
+                form.append(it, assessment[it]);
+            });
             let res = await fetch(url + '/assessment/add-complete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: {
-                    form,
-                },
+                body: form,
             });
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' + res.status);
+                return res;
             }
 
         } catch (e) {
-            throw new Error('HTTP status: ' + e);
+            throw new Error(e);
         }
     };
 

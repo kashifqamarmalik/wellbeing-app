@@ -5,5 +5,6 @@ export class User {
     this.points = points;
     this.location = location;
     this.subsribers = [];
+    this.user_id = '';
   }
 }

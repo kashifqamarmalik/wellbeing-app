@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import {URLSearchParams} from 'react-native/Libraries/Blob/URL';
-import stringifySafe from "react-native/Libraries/Utilities/stringifySafe";
 
 let config = require('../config.js');
 
@@ -39,7 +38,7 @@ const UserAPI = () => {
     };
 
     const createNewUser = async (user) => {
-        if (user === undefined || user.username === undefined) {
+        if (user === undefined || user.username === undefined || user.user_id === '') {
             throw new Error('No valid user passed to createNewUser().');
         }
         try {
