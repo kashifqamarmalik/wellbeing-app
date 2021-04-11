@@ -24,7 +24,7 @@ import Reach from './views/Reach';
 const HomeStack = createStackNavigator(
   {
     //Defination of Navigaton from home screen
-    Home: { screen: Home },
+    Home: {screen: Home},
   },
   {
     defaultNavigationOptions: {
@@ -36,12 +36,12 @@ const HomeStack = createStackNavigator(
       title: 'Wellbeings',
       //Header title
     },
-  }
+  },
 );
 const ProfileStack = createStackNavigator(
   {
     //Defination of Navigaton from setting screen
-    Profile: { screen: Profile},
+    Profile: {screen: Profile},
   },
   {
     defaultNavigationOptions: {
@@ -53,13 +53,13 @@ const ProfileStack = createStackNavigator(
       title: 'Wellbeings',
       //Header title
     },
-  }
+  },
 );
 
 const ContactsStack = createStackNavigator(
   {
     //Defination of Navigaton from setting screen
-    Contacts: { screen: Contacts},
+    Contacts: {screen: Contacts},
   },
   {
     defaultNavigationOptions: {
@@ -71,13 +71,13 @@ const ContactsStack = createStackNavigator(
       title: 'Wellbeings',
       //Header title
     },
-  }
+  },
 );
 
 const ReachStack = createStackNavigator(
   {
     //Defination of Navigaton from setting screen
-    Reach: { screen: Reach },
+    Reach: {screen: Reach},
   },
   {
     defaultNavigationOptions: {
@@ -89,45 +89,32 @@ const ReachStack = createStackNavigator(
       title: 'Wellbeings',
       //Header title
     },
-  }
+  },
 );
-
 
 const App = createBottomTabNavigator(
   {
-    Home: { screen: HomeStack },
-    Profile: { screen: ProfileStack },
-    Contacts: { screen: ContactsStack },
-    Reach: { screen: ReachStack },
+    Home: {screen: HomeStack},
+    Contacts: {screen: ContactsStack},
+    Reach: {screen: ReachStack},
+    Profile: {screen: ProfileStack},
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state;
+    defaultNavigationOptions: ({navigation}) => ({
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        const {routeName} = navigation.state;
         let IconComponent = Ionicons;
         let iconName;
         if (routeName === 'Home') {
-          iconName = `ios-home${focused ?
-            '' : '-outline'
-          }`;
+          iconName = `ios-home${focused ? '' : '-outline'}`;
         } else if (routeName === 'Profile') {
-          iconName = `ios-person${focused ?
-            '' : '-outline'
-          }`;
+          iconName = `ios-person${focused ? '' : '-outline'}`;
         } else if (routeName === 'Contacts') {
-          iconName = `ios-people${focused ?
-            '' : '-outline'
-          }`;
+          iconName = `ios-people${focused ? '' : '-outline'}`;
         } else if (routeName === 'Reach') {
-          iconName = `ios-wifi${focused ?
-            '' : '-outline'
-          }`;
+          iconName = `ios-wifi${focused ? '' : '-outline'}`;
         }
-        return <IconComponent
-                 name={iconName}
-                 size={25}
-                 color={tintColor}
-               />;
+        return <IconComponent name={iconName} size={25} color={tintColor} />;
       },
     }),
     tabBarOptions: {
@@ -136,6 +123,6 @@ const App = createBottomTabNavigator(
       activeBackgroundColor: '#183693',
       inactiveBackgroundColor: '#ffffff',
     },
-  }
+  },
 );
 export default createAppContainer(App);
