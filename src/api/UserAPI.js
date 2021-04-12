@@ -8,7 +8,7 @@ const url = `http://${config.testing.ip}:${config.testing.port}/api`;
 const UserAPI = () => {
     const findUserByUsername = async (username) => {
         try {
-            let res = await fetch(url + '/find-user/?username=' + username, {
+            let res = await fetch(`${url}/find-user/?username=${username}`, {
                 method: 'GET',
             });
             if (res.ok) {
@@ -23,7 +23,7 @@ const UserAPI = () => {
 
     const findUserByID = async (id) => {
         try {
-            let res = await fetch(url + '/find-id/?id=' + id, {
+            let res = await fetch(`${url}/find-id/?id=${id}`, {
                 method: 'GET',
             });
 
@@ -38,7 +38,7 @@ const UserAPI = () => {
     };
 
     const createNewUser = async (user) => {
-        if (user === undefined || user.username === undefined || user.user_id === '') {
+        if (user === undefined || user.username === undefined || user.password === undefined || user.password === '') {
             throw new Error('No valid user passed to createNewUser().');
         }
         try {
@@ -46,7 +46,7 @@ const UserAPI = () => {
             Object.keys(user).forEach(it => {
                 form.append(it, user[it]);
             });
-            let res = await fetch(url + '/user', {
+            let res = await fetch(`${url}/user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

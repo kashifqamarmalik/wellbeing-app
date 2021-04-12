@@ -17,7 +17,7 @@ it('findUserById() using invalid ID should return status 400 and error(s)', asyn
 });
 
 it('findUserByID() using valid ID should return status 200 and user', async () => {
-  let id = '603545c86a1d7a4e903d54e4';
+  let id = '606c9a4094c4d13c0cbfd43a';
   let res = await UserAPI().findUserByID(id);
   expect(res._id).toBe(id);
 });
