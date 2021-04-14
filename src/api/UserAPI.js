@@ -8,54 +8,58 @@ const url = `http://${config.testing.ip}:${config.testing.port}/api`;
 const UserAPI = () => {
     const findUserByUsername = async (username) => {
         try {
-            let res = await fetch(url + '/find-user/?username=' + username, {
+            let res = await fetch(`${url}/find-user/?username=${username}`, {
                 method: 'GET',
             });
             if (res.ok) {
                 return await res.json();
             } else {
-              throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
     };
 
     const findUserByID = async (id) => {
         try {
-            let res = await fetch(url + '/find-id/?id=' + id, {
+            let res = await fetch(`${url}/find-id/?id=${id}`, {
                 method: 'GET',
             });
+
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
     };
 
     const createNewUser = async (user) => {
+        if (user === undefined || user.username === undefined || user.password === undefined || user.password === '') {
+            throw new Error('No valid user passed to createNewUser().');
+        }
         try {
             let form = new URLSearchParams();
-            user.forEach(it => form.append(it, user[it]));
-            let res = await fetch(url + '/user', {
+            Object.keys(user).forEach(it => {
+                form.append(it, user[it]);
+            });
+            let res = await fetch(`${url}/user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: {
-                    form,
-                },
+                body: form,
             });
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
     };
 
@@ -67,10 +71,10 @@ const UserAPI = () => {
             if (res.ok) {
                 return await res.json();
             } else {
-                throw new Error('HTTP status: ' +  res.status);
+                return res;
             }
         } catch (e) {
-            throw new Error('HTTP status: ' +  e);
+            throw new Error(e);
         }
 
     };
