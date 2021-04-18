@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 module.exports = {
   testing: {
     server: 'localhost',
