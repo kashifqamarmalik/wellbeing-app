@@ -1,14 +1,17 @@
 import React from 'react';
-import {Text, View} from 'native-base';
+import {Text, View, Button} from 'native-base';
 import CustomButton from '../components/CustomButton';
 import {Calendar} from 'react-native-plain-calendar';
 import {StyleSheet} from 'react-native';
 
-const Home = () => {
+const Home = ({navigation}) => {
   return (
     <View>
       <View style={styles.button}>
-        <CustomButton title="Quick Assesment" />
+        <CustomButton
+          title="Quick Assesment"
+          onPress={() => navigation.navigate('HomeQuiz')}
+        />
         <CustomButton title="View Assesment" />
       </View>
 

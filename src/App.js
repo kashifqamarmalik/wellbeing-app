@@ -21,11 +21,8 @@ import Home from './views/Home';
 import Profile from './views/Profile';
 import Contacts from './views/Contacts';
 import Reach from './views/Reach';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import MyStack from './MyStack';
 
-function App() {
-  return <SafeAreaProvider>...</SafeAreaProvider>;
-}
 const HomeStack = createStackNavigator(
   {
     //Defination of Navigaton from home screen
@@ -99,7 +96,7 @@ const ReachStack = createStackNavigator(
 
 const App = createBottomTabNavigator(
   {
-    Home: {screen: HomeStack},
+    Home: {screen: MyStack},
     Profile: {screen: ProfileStack},
     Contacts: {screen: ContactsStack},
     Reach: {screen: ReachStack},
