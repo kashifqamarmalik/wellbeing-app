@@ -30,6 +30,11 @@ const getAllVouchers = () => {
         date: '21-01-2021',
         _id: 3,
       },
+      {
+        description: 'Your Voucher',
+        date: '19-01-2021',
+        _id: 4,
+      },
     ];
     return json;
   } catch (e) {
@@ -71,7 +76,7 @@ const getSpecificVoucher = async (id) => {
       {
         description: 'Your Voucher',
         date: '19-01-2021',
-        _id: 0,
+        _id: 4,
       },
     ];
     return json;

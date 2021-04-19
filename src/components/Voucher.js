@@ -3,15 +3,47 @@ import React from 'react';
 import {ListItem as BaseListItem, Left, Right, Text} from 'native-base';
 import {StyleSheet, Modal, View} from 'react-native';
 import CustomButton from './CustomButton';
-import {putRequest, getAllRequest, getSpecificRequest} from '../api/RequestAPI';
+import {getSpecificVoucher, getAllVouchers} from '../api/VoucherAPI';
+import {RequestContext} from '../context/RequestContext';
 
 const Voucher = (props) => {
+  const {vouchers, setVouchers} = React.useContext(RequestContext);
+  const {userVouchers, setUserVouchers} = React.useContext(RequestContext);
   const [press, setPress] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
 
+  const getUserVouchers = async () => {
+    try {
+      let userId = 'testing_ID';
+      let data = await getSpecificVoucher(userId);
+      console.log('after added, User vouchers are: ', data);
+      setUserVouchers(data.reverse());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const getVoucherList = async () => {
+    try {
+      // subtract NEW 'user vouchers' from 'all vouchers'
+      let finalizedData = vouchers.filter(comparer(userVouchers));
+
+      console.log(finalizedData);
+      setVouchers(finalizedData.reverse());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   const updateRequest = async () => {
     try {
+      // Update data in server
+      // ...API here...
       console.log('Item added to your Voucher');
+
+      // Update data in client
+      getUserVouchers();
+      getVoucherList();
       setModalVisible(!modalVisible);
     } catch (e) {
       throw new Error(e);
@@ -20,27 +52,31 @@ const Voucher = (props) => {
 
   return (
     <View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modal}>
-            <Text style={{fontSize: 30, color: '#183693'}}>Confirmation</Text>
-            <View style={{display: 'flex', flexDirection: 'row'}}>
-              <CustomButton
-                title="NO"
-                onPress={() => setModalVisible(!modalVisible)}
-                style={{marginRight: 10, backgroundColor: 'red'}}
-              />
-              <CustomButton title="YES" onPress={() => updateRequest()} />
+      {/* Only in Avaialable Voucher */}
+      {props.flag !== 'YourVouchers' && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modal}>
+              <Text style={{fontSize: 30, color: '#183693'}}>Confirmation</Text>
+              <View style={{display: 'flex', flexDirection: 'row'}}>
+                <CustomButton
+                  title="NO"
+                  onPress={() => setModalVisible(!modalVisible)}
+                  style={{marginRight: 10, backgroundColor: 'red'}}
+                />
+                <CustomButton title="YES" onPress={() => updateRequest()} />
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
+
       <BaseListItem
         onPress={() => {
           setPress(!press);
@@ -57,6 +93,8 @@ const Voucher = (props) => {
             <Text style={{color: '#A9A9A9'}}>{props.time}</Text>
           </Left>
         </Left>
+
+        {/* Only in Avaialable Voucher */}
         {props.flag !== 'YourVouchers' && (
           <Right>
             <CustomButton

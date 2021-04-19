@@ -2,17 +2,30 @@
 import React from 'react';
 import {Container} from 'native-base';
 import AvaiableVouchersList from './VouchersList';
-import {getAllVouchers} from '../api/VoucherAPI';
+import {getAllVouchers, getSpecificVoucher} from '../api/VoucherAPI';
 import {RequestContext} from '../context/RequestContext';
+import {comparer} from '../utils/Utility';
 
 const AvaiableVouchers = (props) => {
   const {vouchers, setVouchers} = React.useContext(RequestContext);
+  const {userVouchers, setUserVouchers} = React.useContext(RequestContext);
+
   React.useEffect(() => {
     const getVoucherList = async () => {
       try {
+        // Get all vouchers
         let data = await getAllVouchers();
-        console.log('data in AvaiableVouchers.js', data);
-        setVouchers(data.reverse());
+
+        // Get user vouchers
+        let userId = 'testing_ID';
+        let subtractData = await getSpecificVoucher(userId);
+        setUserVouchers(subtractData);
+
+        // subtract 'user vouchers' from 'all vouchers'
+        let finalizedData = data.filter(comparer(subtractData));
+        console.log(finalizedData);
+
+        setVouchers(finalizedData.reverse());
       } catch (e) {
         console.log(e.message);
       }

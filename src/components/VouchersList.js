@@ -15,7 +15,7 @@ const VouchersList = (props) => {
             time={item.date}
             requestId={item._id}
             updateAvailableVouchers={props.updateAvailableVouchers}
-            flag={props.flag}
+            flag={props.flag ? props.flag : null}
           />
         )}
       />
