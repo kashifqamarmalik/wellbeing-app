@@ -41,47 +41,61 @@ const Profile = (props) => {
 
   return (
     <SafeAreaView style={{backgroundColor: 'white'}}>
-      <ScrollView style={styles.scrollView}>
-        <Image
-          style={styles.avatar}
-          source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}
-        />
-        <Text style={styles.name}>John Doe</Text>
-        <View style={styles.statistics}>
-          <View style={styles.statisticsItem}>
-            <Text style={styles.text}>Current Points</Text>
-            <Text style={styles.text}>150</Text>
+      <ScrollView>
+        <View style={styles.wrapContainer}>
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
+            }}
+          />
+          <Text style={styles.name}>John Doe</Text>
+
+          <View style={styles.statistics}>
+            <View style={styles.statisticsItem}>
+              <Text style={styles.text}>Current Points</Text>
+              <Text style={styles.text}>150</Text>
+            </View>
+            <View style={styles.statisticsItem}>
+              <Text style={styles.text}>Surveys Taken</Text>
+              <Text style={styles.text}>7</Text>
+            </View>
           </View>
-          <View style={styles.statisticsItem}>
-            <Text style={styles.text}>Surveys Taken</Text>
-            <Text style={styles.text}>7</Text>
+          <View>
+            <CustomButton
+              title="         Use Points         "
+              onPress={() => {
+                goToUsePoint();
+              }}
+            />
           </View>
-        </View>
-        <CustomButton
-          title="         Use Points         "
-          onPress={() => {
-            goToUsePoint();
-          }}
-        />
-        <View style={{marginTop: '10%'}}>
-          <Chart
-            style={{height: '60%', width: '100%', backgroundColor: '#eee'}}
-            xDomain={{min: 0, max: 10}}
-            yDomain={{min: 0, max: 20}}
-            padding={{left: 20, top: 20, bottom: 20, right: 20}}>
-            <VerticalAxis tickValues={[0, 4, 8, 12, 16, 20]} />
-            <HorizontalAxis tickCount={3} />
-            <Line
-              data={data1}
-              smoothing="none"
-              theme={{stroke: {color: 'red', width: 1.5}}}
+          <View style={{marginTop: '10%'}}>
+            <Chart
+              style={{height: '50%', width: '100%', backgroundColor: '#eee'}}
+              xDomain={{min: 0, max: 10}}
+              yDomain={{min: 0, max: 20}}
+              padding={{left: 20, top: 20, bottom: 20, right: 20}}>
+              <VerticalAxis tickValues={[0, 4, 8, 12, 16, 20]} />
+              <HorizontalAxis tickCount={3} />
+              <Line
+                data={data1}
+                smoothing="none"
+                theme={{stroke: {color: 'red', width: 1.5}}}
+              />
+              <Line
+                data={data2}
+                smoothing="none"
+                theme={{stroke: {color: 'blue', width: 1.5}}}
+              />
+            </Chart>
+            <CustomButton
+              style={{backgroundColor: 'red', marginTop: '10%'}}
+              title="           Sign Out           "
+              onPress={() => {
+                console.log('Sign Out btn pressed!');
+              }}
             />
-            <Line
-              data={data2}
-              smoothing="none"
-              theme={{stroke: {color: 'blue', width: 1.5}}}
-            />
-          </Chart>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -89,13 +103,13 @@ const Profile = (props) => {
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
+  wrapContainer: {
     marginHorizontal: 20,
-    height: '100%',
+    marginVertical: '5%',
   },
   avatar: {
     width: '53%',
-    height: '30%',
+    height: '20%',
     borderRadius: 500,
     borderWidth: 4,
     borderColor: 'white',
