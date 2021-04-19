@@ -26,7 +26,7 @@ const Reach = () => {
   return (
     <Container>
       <SegmentedControlTab
-        values={['Avaiable', 'Your Vouchers']}
+        values={['Available', 'Your Vouchers']}
         selectedIndex={selectedIndex}
         tabStyle={styles.tabStyle}
         activeTabStyle={styles.activeTabStyle}
