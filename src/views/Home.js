@@ -5,6 +5,8 @@ import {Calendar} from 'react-native-plain-calendar';
 import {StyleSheet} from 'react-native';
 import UserAPI from '../api/UserAPI.js';
 
+import {AuthContext} from '../components/context';
+
 const Home = () => {
   useEffect(() => {
     UserAPI()
@@ -16,11 +18,18 @@ const Home = () => {
       .catch((error) => console.error(error));
   }, []); //TODO: remove before final version, example on how to fetch and handle result
 
+  const {signOut} = React.useContext(AuthContext);
+
   return (
     <View>
       <View style={styles.button}>
         <CustomButton title="Quick Assessment" />
-        <CustomButton title="View Assessment" />
+        <CustomButton
+          title="View Assessment"
+          onPress={() => {
+            signOut();
+          }}
+        />
       </View>
 
       <View style={styles.calendar}>
