@@ -27,7 +27,6 @@ const HelpSeeker = () => {
     return (
         <RequestList
             itemList={userRequests}
-
         />
 
     );
