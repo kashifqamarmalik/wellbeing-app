@@ -18,28 +18,13 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 
 import ProfileStack from './Stack/ProfileStack';
+import HomeStack from './Stack/HomeStack';
 
 import Home from '../views/Home';
 import Contacts from '../views/Contacts';
 import Reach from '../views/Reach';
-
-const HomeStack = createStackNavigator(
-  {
-    //Defination of Navigaton from home screen
-    Home: {screen: Home},
-  },
-  {
-    defaultNavigationOptions: {
-      //Header customization of the perticular Screen
-      headerStyle: {
-        backgroundColor: '#183693',
-      },
-      headerTintColor: '#FFFFFF',
-      title: 'Wellbeings',
-      //Header title
-    },
-  },
-);
+import HomeQuiz from '../views/HomeQuiz';
+import MyStack from './Stack/HomeStack';
 
 const ContactsStack = createStackNavigator(
   {
