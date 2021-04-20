@@ -1,12 +1,54 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { ListItem as BaseListItem, Left, Right, Text, Container } from 'native-base';
+import { ListItem as BaseListItem, Left, Right, Text } from 'native-base';
 import { StyleSheet, Modal, View } from 'react-native';
 import CustomButton from './CustomButton';
+import { putRequest, getAllRequest, getSpecificRequest } from '../api/RequestAPI';
+import { RequestContext } from '../context/RequestContext';
+
 
 const HelpListItem = (props) => {
+    const { requests, setRequests } = React.useContext(RequestContext);
+    const { userRequests, setUserRequests} = React.useContext(RequestContext);
     const [press, setPress] = React.useState(false);
     const [modalVisible, setModalVisible] = React.useState(false);
+
+    const getUserRequests = async () => {
+        try {
+            let userId = '606580fd2842935724b087b2';
+            let data = await getSpecificRequest(userId);
+            console.log('data', data);
+            setUserRequests(data.reverse());
+        } catch (e) {
+            console.log(e.message);
+        }
+    };
+
+    const getRequestList = async () => {
+        try {
+            let data = await getAllRequest();
+            console.log('data', data);
+            setRequests(data.reverse());
+        } catch (e) {
+            console.log(e.message);
+        }
+    };
+
+
+    const updateRequest = async () => {
+        try {
+            const helper = '607c4785c6ef43520495f51c'; //TODO: load current user id
+            const data = { 'helper_id': helper, 'request_id': props.requestId };
+            console.log('line16 listitem', data);
+            const res = await putRequest(data);
+            console.log('line18 listitem', res);
+            getRequestList();
+            getUserRequests();
+            setModalVisible(!modalVisible);
+        } catch (e) {
+            throw new Error(e);
+        }
+    };
 
     return (
         <View>
@@ -20,11 +62,18 @@ const HelpListItem = (props) => {
             >
                 <View style={styles.modalContainer}>
                     <View style={styles.modal}>
-                        <Text style={{fontSize:30, color:'#183693'}}>Help Request Sent</Text>
-                        <CustomButton
-                            title="Close"
-                            onPress={() => setModalVisible(!modalVisible)}
-                        />
+                        <Text style={{ fontSize: 30, color: '#183693' }}>Confirmation</Text>
+                        <View style ={{display: 'flex', flexDirection: 'row'}}>
+                            <CustomButton
+                                title="Close"
+                                onPress={() => setModalVisible(!modalVisible)}
+                                style={{marginRight: 10}}
+                            />
+                            <CustomButton
+                                title="Help"
+                                onPress={() => updateRequest()}
+                            />
+                        </View>
                     </View>
                 </View>
             </Modal>

@@ -12,6 +12,7 @@ const HelpList = (props) => {
                 renderItem={({ item }) => <HelpListItem
                     description={item.description}
                     time={item.date}
+                    requestId={item._id}
                 />}
             />
         </View>

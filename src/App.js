@@ -7,135 +7,116 @@
  * @flow strict-local
  */
 
-import React from 'react';
-//import all the basic component we have used
-import Ionicons from 'react-native-vector-icons/Ionicons';
-//import Ionicons to show the icon for bottom options
+import React, {useEffect} from 'react';
+import {View, ActivityIndicator} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {AuthContext} from './components/context';
+import AsyncStorage from '@react-native-community/async-storage';
+import RootStackScreen from './screens/RootStackScreen';
 
-//import React Navigation
-import {createAppContainer} from 'react-navigation';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {createStackNavigator} from 'react-navigation-stack';
+import Stack from './screens/Stack';
 
-import Home from './views/Home';
-import Profile from './views/Profile';
-import Contacts from './views/Contacts';
-import Reach from './views/Reach';
-const HomeStack = createStackNavigator(
-  {
-    //Defination of Navigaton from home screen
-    Home: { screen: Home },
-  },
-  {
-    defaultNavigationOptions: {
-      //Header customization of the perticular Screen
-      headerStyle: {
-        backgroundColor: '#183693',
-      },
-      headerTintColor: '#FFFFFF',
-      title: 'Wellbeings',
-      //Header title
-    },
-  }
-);
-const ProfileStack = createStackNavigator(
-  {
-    //Defination of Navigaton from setting screen
-    Profile: { screen: Profile},
-  },
-  {
-    defaultNavigationOptions: {
-      //Header customization of the perticular Screen
-      headerStyle: {
-        backgroundColor: '#183693',
-      },
-      headerTintColor: '#FFFFFF',
-      title: 'Wellbeings',
-      //Header title
-    },
-  }
-);
+const App = () => {
+  const initialLoginState = {
+    isLoading: true,
+    userName: null,
+    userToken: null,
+  };
 
-const ContactsStack = createStackNavigator(
-  {
-    //Defination of Navigaton from setting screen
-    Contacts: { screen: Contacts},
-  },
-  {
-    defaultNavigationOptions: {
-      //Header customization of the perticular Screen
-      headerStyle: {
-        backgroundColor: '#183693',
-      },
-      headerTintColor: '#FFFFFF',
-      title: 'Wellbeings',
-      //Header title
-    },
-  }
-);
+  const loginReducer = (prevState, action) => {
+    switch (action.type) {
+      case 'RETRIEVE_TOKEN':
+        return {
+          ...prevState,
+          userToken: action.token,
+          isLoading: false,
+        };
+      case 'LOGIN':
+        return {
+          ...prevState,
+          userName: action.id,
+          userToken: action.token,
+          isLoading: false,
+        };
+      case 'LOGOUT':
+        return {
+          ...prevState,
+          userName: null,
+          userToken: null,
+          isLoading: false,
+        };
+      case 'REGISTER':
+        return {
+          ...prevState,
+          userName: action.id,
+          userToken: action.token,
+          isLoading: false,
+        };
+    }
+  };
 
-const ReachStack = createStackNavigator(
-  {
-    //Defination of Navigaton from setting screen
-    Reach: { screen: Reach },
-  },
-  {
-    defaultNavigationOptions: {
-      //Header customization of the perticular Screen
-      headerStyle: {
-        backgroundColor: '#183693',
-      },
-      headerTintColor: '#FFFFFF',
-      title: 'Wellbeings',
-      //Header title
-    },
-  }
-);
+  const [loginState, dispatch] = React.useReducer(
+    loginReducer,
+    initialLoginState,
+  );
 
+  const authContext = React.useMemo(
+    () => ({
+      signIn: async (foundUser) => {
+        const userToken = String(foundUser[0].userToken);
+        const userName = foundUser[0].username;
 
-const App = createBottomTabNavigator(
-  {
-    Home: { screen: HomeStack },
-    Profile: { screen: ProfileStack },
-    Contacts: { screen: ContactsStack },
-    Reach: { screen: ReachStack },
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
-        const { routeName } = navigation.state;
-        let IconComponent = Ionicons;
-        let iconName;
-        if (routeName === 'Home') {
-          iconName = `ios-home${focused ?
-            '' : '-outline'
-          }`;
-        } else if (routeName === 'Profile') {
-          iconName = `ios-person${focused ?
-            '' : '-outline'
-          }`;
-        } else if (routeName === 'Contacts') {
-          iconName = `ios-people${focused ?
-            '' : '-outline'
-          }`;
-        } else if (routeName === 'Reach') {
-          iconName = `ios-wifi${focused ?
-            '' : '-outline'
-          }`;
+        try {
+          await AsyncStorage.setItem('userToken', userToken);
+        } catch (e) {
+          console.log(e);
         }
-        return <IconComponent
-                 name={iconName}
-                 size={25}
-                 color={tintColor}
-               />;
+        dispatch({type: 'LOGIN', id: userName, token: userToken});
+      },
+      signOut: async () => {
+        try {
+          await AsyncStorage.removeItem('userToken');
+        } catch (e) {
+          console.log(e);
+        }
+        dispatch({type: 'LOGOUT'});
+      },
+      signUp: () => {
+        // setUserToken('fgkj');
+        // setIsLoading(false);
       },
     }),
-    tabBarOptions: {
-      activeTintColor: '#ffffff',
-      inactiveTintColor: '#183693',
-      activeBackgroundColor: '#183693',
-      inactiveBackgroundColor: '#ffffff',
-    },
+    [],
+  );
+
+  useEffect(() => {
+    setTimeout(async () => {
+      let userToken;
+      userToken = null;
+      try {
+        userToken = await AsyncStorage.getItem('userToken');
+      } catch (e) {
+        console.log(e);
+      }
+      dispatch({type: 'RETRIEVE_TOKEN', token: userToken});
+    }, 1000);
+  }, []);
+
+  if (loginState.isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
-);
-export default createAppContainer(App);
+
+  return (
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        {loginState.userToken !== null ? <Stack /> : <RootStackScreen />}
+      </NavigationContainer>
+    </AuthContext.Provider>
+  );
+};
+
+export default App;
