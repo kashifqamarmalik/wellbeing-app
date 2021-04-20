@@ -16,6 +16,8 @@ import {VerticalAxis} from 'react-native-responsive-linechart/lib/VerticalAxis';
 import {HorizontalAxis} from 'react-native-responsive-linechart/lib/HorizontalAxis';
 import {Line} from 'react-native-responsive-linechart/lib/Line';
 
+import {AuthContext} from '../components/context';
+
 const data1 = [
   {x: 0, y: 1},
   {x: 1, y: 7},
@@ -38,6 +40,8 @@ const Profile = (props) => {
   const goToUsePoint = () => {
     props.navigation.navigate('UsePoint');
   };
+
+  const {signOut} = React.useContext(AuthContext);
 
   return (
     <SafeAreaView style={{backgroundColor: 'white'}}>
@@ -92,7 +96,7 @@ const Profile = (props) => {
               style={{backgroundColor: 'red', marginTop: '10%'}}
               title="           Sign Out           "
               onPress={() => {
-                console.log('Sign Out btn pressed!');
+                signOut();
               }}
             />
           </View>

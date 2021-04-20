@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 
 const ProfileStack = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <Stack.Navigator>
         <Stack.Screen
           name="Profile"
