@@ -7,7 +7,6 @@ let config = require('../config.js');
 const url = `http://${config.testing.ip}:${config.testing.port}/api`;
 
 const AssessmentAPI = () => {
-
     const getBasicAssessment = async () => {
         try {
             let res = await fetch(`${url}/assessment/basic`, {
