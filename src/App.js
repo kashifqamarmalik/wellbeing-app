@@ -65,9 +65,10 @@ const App = () => {
       signIn: async (foundUser) => {
         const userToken = String(foundUser[0].userToken);
         const userName = foundUser[0].username;
-
+        const userid = foundUser[0].id;
         try {
           await AsyncStorage.setItem('userToken', userToken);
+          await AsyncStorage.setItem('userid', userid);
         } catch (e) {
           console.log(e);
         }
@@ -76,6 +77,7 @@ const App = () => {
       signOut: async () => {
         try {
           await AsyncStorage.removeItem('userToken');
+          await AsyncStorage.removeItem('userid');
         } catch (e) {
           console.log(e);
         }
