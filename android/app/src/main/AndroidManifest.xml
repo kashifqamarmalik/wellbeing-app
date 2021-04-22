@@ -2,8 +2,9 @@
   package="com.wellbeingapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    
 
-    <application
+    <application 
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
