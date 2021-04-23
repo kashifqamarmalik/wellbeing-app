@@ -2,7 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import {Image, SafeAreaView, ScrollView, StyleSheet, Text, View,} from 'react-native';
 import CustomButton from '../components/CustomButton';
-// import {Chart, VerticalAxis, HorizontalAxis, Line} from 'react-native-responsive-linechart'
 import {Chart} from 'react-native-responsive-linechart/lib/Chart';
 import {VerticalAxis} from 'react-native-responsive-linechart/lib/VerticalAxis';
 import {HorizontalAxis} from 'react-native-responsive-linechart/lib/HorizontalAxis';
@@ -17,18 +16,19 @@ const Profile = (props) => {
     const [loading, setLoading] = useState(false);
     const [dataFeel, setDataFeel] = useState([{x: 0, y: 0}]);
     const [dataWork, setDataWork] = useState([{x: 0, y: 0}]);
-    const today = new Date();
-    const weekAgo = new Date(today - 604800000);
 
     useEffect(() => {
         setLoading(true);
+        //TODO: currently gets a static test users data.
         AssessmentAPI().getUserAssessments('606c9a4094c4d13c0cbfd43a', '6026848f720e2f5db8c09ca9')
             .then((res) => {
                 let datas = jsonArrayToData(res);
-                setDataWork(datas.dataWorkload);
-                setDataFeel(datas.dataFeeling);
-                console.log(dataWork);
-                console.log(dataFeel);
+                if (datas.dataWorkload.length > 0) {
+                    setDataWork(datas.dataWorkload);
+                }
+                if (datas.dataFeeling.length > 0) {
+                    setDataFeel(datas.dataFeeling);
+                }
             }).then(() => {
             setLoading(false);
         }).catch(e => console.log(e));
@@ -67,18 +67,18 @@ const Profile = (props) => {
                     <View style={{marginTop: '10%'}}>
                         <Chart
                             style={{height: '50%', width: '100%', backgroundColor: '#eee'}}
-                            xDomain={{min: weekAgo.getDate(), max: today.getDate()}}
+                            xDomain={{min: 0, max: 6}}
                             yDomain={{min: 0, max: 10}}
                             padding={{left: 20, top: 20, bottom: 20, right: 20}}>
                             <VerticalAxis tickValues={[0, 2, 4, 6, 8, 10]}/>
-                            <HorizontalAxis tickCount={8}/>
+                            <HorizontalAxis tickCount={7}/>
                             <Line
-                                data={dataFeel}
+                                data={dataWork}
                                 smoothing="none"
                                 theme={{stroke: {color: 'red', width: 1.5}}}
                             />
                             <Line
-                                data={dataWork}
+                                data={dataFeel}
                                 smoothing="none"
                                 theme={{stroke: {color: 'blue', width: 1.5}}}
                             />
