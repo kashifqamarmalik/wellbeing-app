@@ -1,6 +1,7 @@
 import AssessmentAPI from '../src/api/AssessmentAPI';
 import {Assessment} from '../src/data/Assessment';
 import 'isomorphic-fetch';
+import {Question} from '../src/data/Question';
 
 it('getBasicAssessment() should return basic assessment', async () => {
   let res = await AssessmentAPI().getBasicAssessment();
@@ -38,7 +39,7 @@ it('getUserAssessments() should return matching assessment(s).', async () => {
   });
 });
 
-it('putCompletedAssessment() with missing assessmentId should return error', async () => {
+it('getUserAssessments() with missing assessmentId should return error', async () => {
   let userId = '606c9a4094c4d13c0cbfd423';
   let assessmentId = '';
   await expect(async () => {
@@ -46,10 +47,46 @@ it('putCompletedAssessment() with missing assessmentId should return error', asy
   }).rejects.toThrow('Invalid ids passed to get.');
 });
 
-it('putCompletedAssessment() with missing userId should return error', async () => {
+it('getUserAssessments() with missing userId should return error', async () => {
   let assessmentId = '606c9a4094c4d13c0cbfd43a';
   let userId = '';
   await expect(async () => {
     await AssessmentAPI().getUserAssessments(userId, assessmentId);
   }).rejects.toThrow('Invalid ids passed to get.');
+});
+
+it('putCompletedAssessment() with valid parameter should POSTed assessment', async () => {
+  let assessmentId = '6026848f720e2f5db8c09ca9';
+  let userId = '606c9a4094c4d13c0cbfd43a';
+  let question1 = new Question(
+    '60268600a5369fd7c2e0e19f',
+    'How are you feeling?',
+    0,
+    10,
+    'Bad',
+    'Good',
+    0,
+  );
+  let question2 = new Question(
+    '6026876aa5369fd7c2e0e1a0',
+    'How is your workload?',
+    0,
+    10,
+    'Low',
+    'Heavy',
+    2,
+  );
+  let questions = [question1, question2];
+  let assessment = new Assessment(assessmentId, questions, 'hi');
+
+  assessment.setQuestionScore('60268600a5369fd7c2e0e19f', 2);
+  assessment.setQuestionScore('6026876aa5369fd7c2e0e1a0', 6);
+  assessment.setUserId(userId);
+  assessment.setAssessmentName('Quick Assessment');
+
+  let res = await AssessmentAPI().putCompletedAssessment(assessment);
+  console.log(res);
+  expect(res.user_id).toBe(userId);
+  expect(res.assessment_id).toBe(assessmentId);
+  expect(res.answers.length).toBe(2);
 });
