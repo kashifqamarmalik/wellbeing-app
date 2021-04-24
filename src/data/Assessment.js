@@ -1,5 +1,3 @@
-import {Question} from './Question';
-
 export class Assessment {
   constructor(assessment_id, questions, comment) {
     this.user_id = '';

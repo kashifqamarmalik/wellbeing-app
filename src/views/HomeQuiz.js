@@ -18,13 +18,11 @@ const HomeQuiz = () => {
 
   //fetching the quiz from the API
   async function getData() {
-    const res = await fetch(`http://192.168.1.223:8066/api/assessment/basic`);
-    res
-      .json()
+    //Change the AssessmentAPI to use your IP by changing it in config
+    AssessmentAPI().getBasicAssessment()
       .then((res) => {
         setQuiz(res);
         setLoaded(true);
-        //console.log('fetched quiz', quiz);
         //q1 = quiz.questions[0].question_string;
         setQ1(quiz.questions[0].question_string);
         setMax1(quiz.questions[0].max_text);
@@ -38,7 +36,7 @@ const HomeQuiz = () => {
       });
   }
 
-  useEffect(() => {
+  useEffect( () => {
     getData();
   }, [quiz]);
 
@@ -97,7 +95,7 @@ const HomeQuiz = () => {
       },
     ],
   };
-  function post() {
+  const post = async () => {
     let assessment = new Assessment(
       '6026848f720e2f5db8c09ca9',
       [],
@@ -105,10 +103,10 @@ const HomeQuiz = () => {
     );
     assessment.setUserId('606c9a4094c4d13c0cbfd43a');
     assessment.setAssessmentName('Quick Assessment');
-    let res = AssessmentAPI().putCompletedAssessment(assessment);
-    //let json = res.json();
-    //console.log('json', json);
-  }
+    //This will return status 400 because the questions/answers array is empty
+    let res = await AssessmentAPI().putCompletedAssessment(assessment);
+    console.log('json', res);
+  };
 
   return (
     <View>
@@ -116,7 +114,12 @@ const HomeQuiz = () => {
       <RadioButtonRN data={op1} selectedBtn={(e) => console.log(e)} />
       <Text style={styles.question}>{q2}</Text>
       <RadioButtonRN data={op2} selectedBtn={(e) => console.log(e)} />
-      <CustomButton title="Submit" onPress={() => post()}></CustomButton>
+      <CustomButton
+        title="Submit"
+        onPress={async () => {
+          post();
+        }}
+      />
     </View>
   );
 };

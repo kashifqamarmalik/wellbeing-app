@@ -90,3 +90,19 @@ it('putCompletedAssessment() with valid parameter should POSTed assessment', asy
   expect(res.assessment_id).toBe(assessmentId);
   expect(res.answers.length).toBe(2);
 });
+
+it('putCompletedAssessment() with empty array will return status 400 message empty array', async () => {
+  let assessment = new Assessment(
+    '6026848f720e2f5db8c09ca9',
+    [],
+    'Hello from app',
+  );
+  assessment.setUserId('606c9a4094c4d13c0cbfd43a');
+  assessment.setAssessmentName('Quick Assessment');
+  let res = await AssessmentAPI().putCompletedAssessment(assessment);
+  console.log(res);
+  let json = await res.json();
+  expect(res.status).toBe(400);
+  expect(res.statusText).toBe('Bad Request');
+  expect(json.errors).toBe('Empty answer array.');
+});
