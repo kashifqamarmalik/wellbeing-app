@@ -46,6 +46,7 @@ const UserAPI = () => {
             Object.keys(user).forEach(it => {
                 form.append(it, user[it]);
             });
+            console.log(form);
             let res = await fetch(`${url}/user`, {
                 method: 'POST',
                 headers: {

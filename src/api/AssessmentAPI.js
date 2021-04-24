@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import {URLSearchParams} from "react-native/Libraries/Blob/URL";
+import {URLSearchParams} from 'react-native/Libraries/Blob/URL';
 
 let config = require('../config.js');
 
@@ -29,7 +29,10 @@ const AssessmentAPI = () => {
         try {
             let form = new URLSearchParams();
             Object.keys(assessment).forEach(it => {
-                form.append(it, assessment[it]);
+                if (it === '_questions' || it === 'questions') {
+                    let temp = JSON.stringify(assessment[it]);
+                    form.append('answers', temp);
+                } else {form.append(it, assessment[it]);}
             });
             let res = await fetch(`${url}/assessment/add-complete`, {
                 method: 'POST',
