@@ -9,6 +9,9 @@ import {Line} from 'react-native-responsive-linechart/lib/Line';
 import AssessmentAPI from '../api/AssessmentAPI';
 import {jsonArrayToData} from '../utils/Utility';
 
+import {AuthContext} from '../components/context';
+
+
 const Profile = (props) => {
     const goToUsePoint = () => {
         props.navigation.navigate('UsePoint');
@@ -33,7 +36,6 @@ const Profile = (props) => {
             setLoading(false);
         }).catch(e => console.log(e));
     }, []);
-
     return (
         <SafeAreaView style={{backgroundColor: 'white'}}>
             <ScrollView>

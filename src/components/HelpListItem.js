@@ -5,6 +5,7 @@ import { StyleSheet, Modal, View } from 'react-native';
 import CustomButton from './CustomButton';
 import { putRequest, getAllRequest, getSpecificRequest } from '../api/RequestAPI';
 import { RequestContext } from '../context/RequestContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 const HelpListItem = (props) => {
@@ -15,7 +16,7 @@ const HelpListItem = (props) => {
 
     const getUserRequests = async () => {
         try {
-            let userId = '606580fd2842935724b087b2';
+            const userId = await AsyncStorage.getItem('userid');
             let data = await getSpecificRequest(userId);
             console.log('data', data);
             setUserRequests(data.reverse());
@@ -37,7 +38,8 @@ const HelpListItem = (props) => {
 
     const updateRequest = async () => {
         try {
-            const helper = '607c4785c6ef43520495f51c'; //TODO: load current user id
+            const helper = await AsyncStorage.getItem('userid');
+            //const helper = '607c4785c6ef43520495f51c'; //TODO: load current user id
             const data = { 'helper_id': helper, 'request_id': props.requestId };
             console.log('line16 listitem', data);
             const res = await putRequest(data);

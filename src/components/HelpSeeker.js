@@ -6,6 +6,7 @@ import { postRequest, deleteRequest, getSpecificRequest } from '../api/RequestAP
 import UserAPI from '../api/UserAPI.js';
 import { FlatList, View, StyleSheet, Modal } from 'react-native';
 import { RequestContext } from '../context/RequestContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const HelpSeeker = () => {
     const { userRequests, setUserRequests } = React.useContext(RequestContext);
@@ -13,7 +14,7 @@ const HelpSeeker = () => {
     React.useEffect(() => {
         const getUserRequests = async () => {
             try {
-                let userId = '606580fd2842935724b087b2';
+                const userId = await AsyncStorage.getItem('userid');
                 let data = await getSpecificRequest(userId);
                 console.log('data', data);
                 setUserRequests(data.reverse());
@@ -40,7 +41,8 @@ const RequestList = (props) => {
 
     const getUserRequests = async () => {
         try {
-            let userId = '606580fd2842935724b087b2';
+            //let userId = '606580fd2842935724b087b2';
+            const userId = await AsyncStorage.getItem('userid');
             let data = await getSpecificRequest(userId);
             console.log('data', data);
             setUserRequests(data.reverse());
@@ -51,7 +53,9 @@ const RequestList = (props) => {
 
     const submitRequest = async () => {
         try {
-            const userId = '606580fd2842935724b087b2'; //TODO: load current user id
+            //const userId = '606580fd2842935724b087b2'; //TODO: load current user id
+            const userId = await AsyncStorage.getItem('userid');
+            console.log('userid', userId);
             if (input.length > 0) {
                 const data = { 'user_id': userId, 'description': input };
                 const res = await postRequest(data);
@@ -115,7 +119,19 @@ const RequestListItem = (props) => {
             }
         };
         getHelperUsername();
-    },[]);
+    },[props.helperId]);
+
+    const getUserRequests = async () => {
+        try {
+            //let userId = '606580fd2842935724b087b2';
+            const userId = await AsyncStorage.getItem('userid');
+            let data = await getSpecificRequest(userId);
+            console.log('data', data);
+            setUserRequests(data.reverse());
+        } catch (e) {
+            console.log(e.message);
+        }
+    };
 
         const userDeleteRequest = async () => {
             try {
@@ -123,6 +139,7 @@ const RequestListItem = (props) => {
                 const response = await deleteRequest(requestId);
                 console.log('line94,', response);
                 setUserRequests(userRequests.filter((p) => p._id !== props.requestId));
+                getUserRequests();
             } catch (e) {
                 throw new Error(e);
             }

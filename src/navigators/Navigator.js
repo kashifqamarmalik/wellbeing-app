@@ -80,9 +80,9 @@ const ReachStack = createStackNavigator(
 const Navigator = createBottomTabNavigator(
   {
     Home: {screen: HomeStack},
-    Profile: {screen: ProfileStack},
-    Contacts: {screen: ContactsStack},
     Reach: {screen: ReachStack},
+    Contacts: {screen: ContactsStack},
+    Profile: {screen: ProfileStack},
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
