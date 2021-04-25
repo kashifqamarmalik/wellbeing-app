@@ -55,7 +55,7 @@ it('getUserAssessments() with missing userId should return error', async () => {
   }).rejects.toThrow('Invalid ids passed to get.');
 });
 
-it('putCompletedAssessment() with valid parameter should POSTed assessment', async () => {
+it('putCompletedAssessment() with valid parameter should POST assessment', async () => {
   let assessmentId = '6026848f720e2f5db8c09ca9';
   let userId = '606c9a4094c4d13c0cbfd43a';
   let question1 = new Question(

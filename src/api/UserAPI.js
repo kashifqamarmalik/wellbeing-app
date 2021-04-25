@@ -3,7 +3,8 @@ import {URLSearchParams} from 'react-native/Libraries/Blob/URL';
 
 let config = require('../config.js');
 
-const url = `http://${config.testing.ip}:${config.testing.port}/api`;
+//const url = `https://${config.testing.ip}:${config.testing.port}/api`;
+const url = config.cloud.uri;
 
 const UserAPI = () => {
     const findUserByUsername = async (username) => {
@@ -42,11 +43,18 @@ const UserAPI = () => {
             throw new Error('No valid user passed to createNewUser().');
         }
         try {
-            let form = new URLSearchParams();
+            /*let form = new URLSearchParams();
             Object.keys(user).forEach(it => {
                 form.append(it, user[it]);
             });
-            console.log(form);
+            console.log(form);*/
+            let form = [];
+            Object.entries(user).forEach((key) => {
+                let encKey = encodeURIComponent(key[0]);
+                let encVal = encodeURIComponent(key[1]);
+                form.push(`${encKey}=${encVal}`);
+            });
+            form = form.join('&');
             let res = await fetch(`${url}/user`, {
                 method: 'POST',
                 headers: {

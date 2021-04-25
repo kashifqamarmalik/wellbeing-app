@@ -5,6 +5,7 @@ import AssessmentAPI from '../api/AssessmentAPI';
 import {Assessment} from '../data/Assessment';
 import React, {useEffect, useState} from 'react';
 import RadioButtonRN from 'radio-buttons-react-native';
+import UserAPI from "../api/UserAPI";
 
 const HomeQuiz = () => {
   const [quiz, setQuiz] = useState();
@@ -18,9 +19,9 @@ const HomeQuiz = () => {
 
   //fetching the quiz from the API
   async function getData() {
-    //Change the AssessmentAPI to use your IP by changing it in config
     AssessmentAPI().getBasicAssessment()
       .then((res) => {
+        console.log(res);
         setQuiz(res);
         setLoaded(true);
         //q1 = quiz.questions[0].question_string;
@@ -38,7 +39,7 @@ const HomeQuiz = () => {
 
   useEffect( () => {
     getData();
-  }, [quiz]);
+  }, []);
 
   const op1 = [
     {
@@ -101,11 +102,12 @@ const HomeQuiz = () => {
       [],
       'Hello from app',
     );
-    assessment.setUserId('606c9a4094c4d13c0cbfd43a');
+    assessment.setUserId('608041fe2abcce6f6cc2f72c');
     assessment.setAssessmentName('Quick Assessment');
     //This will return status 400 because the questions/answers array is empty
     let res = await AssessmentAPI().putCompletedAssessment(assessment);
-    console.log('json', res);
+    let json = await res.json();
+    console.log('json', json);
   };
 
   return (
@@ -116,7 +118,7 @@ const HomeQuiz = () => {
       <RadioButtonRN data={op2} selectedBtn={(e) => console.log(e)} />
       <CustomButton
         title="Submit"
-        onPress={async () => {
+        onPress={() => {
           post();
         }}
       />
