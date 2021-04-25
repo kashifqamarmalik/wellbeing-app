@@ -12,6 +12,7 @@ export class Question {
     this.question_string = question_string;
     this.min_score = min_score;
     this.max_score = max_score;
+    this.max_text = max_text;
     this.min_text = min_text;
     this.score = score;
   }

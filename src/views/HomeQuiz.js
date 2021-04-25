@@ -3,6 +3,7 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import AssessmentAPI from '../api/AssessmentAPI';
 import {Assessment} from '../data/Assessment';
+import Question from '../data/Question';
 import React, {useEffect, useState} from 'react';
 import RadioButtonRN from 'radio-buttons-react-native';
 
@@ -19,7 +20,8 @@ const HomeQuiz = () => {
   //fetching the quiz from the API
   async function getData() {
     //Change the AssessmentAPI to use your IP by changing it in config
-    AssessmentAPI().getBasicAssessment()
+    AssessmentAPI()
+      .getBasicAssessment()
       .then((res) => {
         setQuiz(res);
         setLoaded(true);
@@ -36,7 +38,7 @@ const HomeQuiz = () => {
       });
   }
 
-  useEffect( () => {
+  useEffect(() => {
     getData();
   }, [quiz]);
 
@@ -58,54 +60,74 @@ const HomeQuiz = () => {
     },
   ];
 
-  const ass = {
-    comment: 'This assessment came from the app',
-    user_id: '608041de2abcce6f6cc2f72b',
-    assessment_id: '6026848f720e2f5db8c09ca9',
-    answers: [
-      {
-        score: {
-          $numberDecimal: '-1',
-        },
-        question_id: '60268600a5369fd7c2e0e19f',
-        question_string: 'How are you feeling?',
-        min_score: {
-          $numberDecimal: '0',
-        },
-        max_score: {
-          $numberDecimal: '10',
-        },
-        max_text: 'Good',
-        min_text: 'Bad',
+  /*let a1 = Question(
+    '60268600a5369fd7c2e0e19f',
+    'How are you feeling?',
+    0,
+    10,
+    'Good',
+    'Bad',
+    10,
+  );
+  let a2 = Question(
+    '6026876aa5369fd7c2e0e1a0',
+    'How is your workload?',
+    0,
+    10,
+    'Heavy',
+    'Low',
+    10,
+  );*/
+
+  const answers = [
+    {
+      score: {
+        $numberDecimal: '-1',
       },
-      {
-        score: {
-          $numberDecimal: '10',
-        },
-        question_id: '6026876aa5369fd7c2e0e1a0',
-        question_string: 'How is your workload?',
-        min_score: {
-          $numberDecimal: '0',
-        },
-        max_score: {
-          $numberDecimal: '10',
-        },
-        max_text: 'Heavy',
-        min_text: 'Low',
+      question_id: '60268600a5369fd7c2e0e19f',
+      question_string: 'How are you feeling?',
+      min_score: {
+        $numberDecimal: '0',
       },
-    ],
-  };
-  const post = async () => {
+      max_score: {
+        $numberDecimal: '10',
+      },
+      max_text: 'Good',
+      min_text: 'Bad',
+    },
+    {
+      score: {
+        $numberDecimal: '-1',
+      },
+      question_id: '6026876aa5369fd7c2e0e1a0',
+      question_string: 'How is your workload?',
+      min_score: {
+        $numberDecimal: '0',
+      },
+      max_score: {
+        $numberDecimal: '10',
+      },
+      max_text: 'Heavy',
+      min_text: 'Low',
+    },
+  ];
+
+  /* if (loaded) {
+    answers = quiz.questions;
+  }*/
+
+  const post = async (ans) => {
     let assessment = new Assessment(
       '6026848f720e2f5db8c09ca9',
-      [],
-      'Hello from app',
+      ans,
+      'kashif comment',
     );
-    assessment.setUserId('606c9a4094c4d13c0cbfd43a');
+    assessment.setUserId('608041fe2abcce6f6cc2f72c');
     assessment.setAssessmentName('Quick Assessment');
     //This will return status 400 because the questions/answers array is empty
     let res = await AssessmentAPI().putCompletedAssessment(assessment);
-    console.log('json', res);
+    let json = await res.json();
+    console.log('json', json);
   };
 
   return (
@@ -117,7 +139,7 @@ const HomeQuiz = () => {
       <CustomButton
         title="Submit"
         onPress={async () => {
-          post();
+          post(answers);
         }}
       />
     </View>
