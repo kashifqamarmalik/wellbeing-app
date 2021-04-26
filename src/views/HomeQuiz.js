@@ -1,11 +1,12 @@
 import {Button, Text, View} from 'native-base';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import AssessmentAPI from '../api/AssessmentAPI';
 import {Assessment} from '../data/Assessment';
 import React, {useEffect, useState} from 'react';
 import RadioButtonRN from 'radio-buttons-react-native';
-import UserAPI from "../api/UserAPI";
+import UserAPI from '../api/UserAPI';
+import {Question} from '../data/Question';
 
 const HomeQuiz = () => {
   const [quiz, setQuiz] = useState();
@@ -16,30 +17,36 @@ const HomeQuiz = () => {
   const [q2, setQ2] = useState();
   const [max2, setMax2] = useState();
   const [min2, setMin2] = useState();
+  const [comment, setComment] = useState();
+  const [score1, setScore1] = useState();
+  const [score2, setScore2] = useState();
 
   //fetching the quiz from the API
+
   async function getData() {
-    AssessmentAPI().getBasicAssessment()
+    const res = AssessmentAPI().getBasicAssessment();
+    res
       .then((res) => {
-        console.log(res);
         setQuiz(res);
+
         setLoaded(true);
-        //q1 = quiz.questions[0].question_string;
-        setQ1(quiz.questions[0].question_string);
-        setMax1(quiz.questions[0].max_text);
-        setMin1(quiz.questions[0].min_text);
-        setQ2(quiz.questions[1].question_string);
-        setMax2(quiz.questions[1].max_text);
-        setMin2(quiz.questions[1].min_text);
+        if (loaded) {
+          setQ1(quiz.questions[0].question_string);
+          setMax1(quiz.questions[0].max_text);
+          setMin1(quiz.questions[0].min_text);
+          setQ2(quiz.questions[1].question_string);
+          setMax2(quiz.questions[1].max_text);
+          setMin2(quiz.questions[1].min_text);
+        }
       })
       .catch((error) => {
         console.log('error', error);
       });
   }
 
-  useEffect( () => {
+  useEffect(() => {
     getData();
-  }, []);
+  }, [quiz]);
 
   const op1 = [
     {
@@ -59,63 +66,75 @@ const HomeQuiz = () => {
     },
   ];
 
-  const ass = {
-    comment: 'This assessment came from the app',
-    user_id: '608041de2abcce6f6cc2f72b',
-    assessment_id: '6026848f720e2f5db8c09ca9',
-    answers: [
-      {
-        score: {
-          $numberDecimal: '-1',
-        },
-        question_id: '60268600a5369fd7c2e0e19f',
-        question_string: 'How are you feeling?',
-        min_score: {
-          $numberDecimal: '0',
-        },
-        max_score: {
-          $numberDecimal: '10',
-        },
-        max_text: 'Good',
-        min_text: 'Bad',
-      },
-      {
-        score: {
-          $numberDecimal: '10',
-        },
-        question_id: '6026876aa5369fd7c2e0e1a0',
-        question_string: 'How is your workload?',
-        min_score: {
-          $numberDecimal: '0',
-        },
-        max_score: {
-          $numberDecimal: '10',
-        },
-        max_text: 'Heavy',
-        min_text: 'Low',
-      },
-    ],
-  };
+  let a1 = new Question(
+    '60268600a5369fd7c2e0e19f',
+    'How are you feeling?',
+    0,
+    10,
+    'Bad',
+    'Good',
+  );
+
+  let a2 = new Question(
+    '6026876aa5369fd7c2e0e1a0',
+    'How is your workload?',
+    0,
+    10,
+    'Low',
+    'Heavy',
+  );
+  const answers = [a1, a2];
+
   const post = async () => {
     let assessment = new Assessment(
       '6026848f720e2f5db8c09ca9',
-      [],
-      'Hello from app',
+      answers,
+      comment,
     );
     assessment.setUserId('608041fe2abcce6f6cc2f72c');
     assessment.setAssessmentName('Quick Assessment');
-    //This will return status 400 because the questions/answers array is empty
+    assessment.setQuestionScore('60268600a5369fd7c2e0e19f', score1);
+    assessment.setQuestionScore('6026876aa5369fd7c2e0e1a0', score2);
+    console.log('score1', score1);
+    console.log('score2', score2);
+
     let res = await AssessmentAPI().putCompletedAssessment(assessment);
-    let json = await res.json();
-    console.log('json', json);
+    //let json = await res.json();
+    //console.log('json', res);
   };
 
   return (
     <View>
       <Text style={styles.question}>{q1}</Text>
-      <RadioButtonRN data={op1} selectedBtn={(e) => console.log(e)} />
+      <RadioButtonRN
+        data={op1}
+        selectedBtn={(e) => {
+          if (e === 'Good') {
+            setScore1(10);
+          } else {
+            setScore1(0);
+          }
+        }}
+      />
       <Text style={styles.question}>{q2}</Text>
-      <RadioButtonRN data={op2} selectedBtn={(e) => console.log(e)} />
+      <RadioButtonRN
+        data={op2}
+        selectedBtn={(e) => {
+          if (e === 'Low') {
+            setScore2(10);
+          } else {
+            setScore2(0);
+          }
+        }}
+      />
+      <TextInput
+        multiline={true}
+        numberOfLines={4}
+        style={styles.inputQuestion}
+        placeholder="Write your comment"
+        value={comment}
+        onChangeText={setComment}
+      />
       <CustomButton
         title="Submit"
         onPress={() => {
@@ -182,6 +201,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 10,
     marginBottom: 10,
+  },
+  inputQuestion: {
+    margin: '6%',
+    textAlign: 'center',
+    borderColor: '#ccc',
+    height: 70,
+    width: '90%',
+
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: '#000000',
   },
   roundButton1: {
     width: 90,

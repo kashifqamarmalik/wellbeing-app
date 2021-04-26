@@ -13,6 +13,7 @@ export class Question {
     this.min_score = min_score;
     this.max_score = max_score;
     this.min_text = min_text;
+    this.max_text = max_text;
     this.score = score;
   }
 }
