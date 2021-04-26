@@ -1,16 +1,18 @@
-import React, {useEffect} from 'react';
-import {Text, View} from 'native-base';
+import React from 'react';
+import {Text, View, Button} from 'native-base';
 import CustomButton from '../components/CustomButton';
 import {Calendar} from 'react-native-plain-calendar';
 import {StyleSheet} from 'react-native';
-import UserAPI from '../api/UserAPI.js';
 
-const Home = () => {
+const Home = ({navigation}) => {
   return (
     <View>
       <View style={styles.button}>
-        <CustomButton title="Quick Assessment" />
-        <CustomButton title="View Assessment" />
+        <CustomButton
+          title="Quick Assesment"
+          onPress={() => navigation.navigate('HomeQuiz')}
+        />
+        <CustomButton title="View Assesment" />
       </View>
 
       <View style={styles.calendar}>

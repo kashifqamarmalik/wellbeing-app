@@ -4,7 +4,8 @@ import {URLSearchParams} from 'react-native/Libraries/Blob/URL';
 
 let config = require('../config.js');
 
-const url = `http://${config.testing.ip}:${config.testing.port}/api`;
+//const url = `http://${config.testing.ip}:${config.testing.port}/api`;
+const url = config.cloud.uri;
 
 const AssessmentAPI = () => {
     const getBasicAssessment = async () => {
@@ -27,13 +28,19 @@ const AssessmentAPI = () => {
             throw new Error('No valid assessment passed to putCompletedAssessment().');
         }
         try {
-            let form = new URLSearchParams();
-            Object.keys(assessment).forEach(it => {
-                if (it === '_questions' || it === 'questions') {
-                    let temp = JSON.stringify(assessment[it]);
-                    form.append('answers', temp);
-                } else {form.append(it, assessment[it]);}
+            let form = [];
+            Object.entries(assessment).forEach((key) => {
+                if (key[0] === '_questions' || key[0] === 'questions') {
+                    let temp = JSON.stringify(key[1]);
+                    let encKey = encodeURIComponent('answers');
+                    let encVal = encodeURIComponent(temp);
+                    form.push(`${encKey}=${encVal}`);
+                }
+               let encKey = encodeURIComponent(key[0]);
+               let encVal = encodeURIComponent(key[1]);
+               form.push(`${encKey}=${encVal}`);
             });
+            form = form.join('&');
             let res = await fetch(`${url}/assessment/add-complete`, {
                 method: 'POST',
                 headers: {
