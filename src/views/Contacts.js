@@ -25,7 +25,7 @@ const Contacts = () => {
 
   return contacts.map((contact) => {
     return (
-      <View style={styles.button}>
+      <View key={contact.phone} style={styles.button}>
         <View style={styles.B1}>
           <Text style={styles.Text}>E-Mail: {contact.email}</Text>
           <Text style={styles.Text}>Phone: {contact.phone}</Text>
