@@ -3,7 +3,8 @@
 let config = require('../config.js');
 
 //const baseURL = 'http://localhost:8066/api';
-const baseURL = `http://${ config.testing.ip }:${ config.testing.port }/api`;
+//const baseURL = `http://${ config.testing.ip }:${ config.testing.port }/api`;
+const baseURL = config.cloud.uri;
 
 const getAllRequest = async () => {
   try {
