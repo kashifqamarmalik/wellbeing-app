@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import CustomButton from '../components/CustomButton';
 import {Chart} from 'react-native-responsive-linechart/lib/Chart';
 import {VerticalAxis} from 'react-native-responsive-linechart/lib/VerticalAxis';
@@ -15,22 +16,48 @@ import {HorizontalAxis} from 'react-native-responsive-linechart/lib/HorizontalAx
 import {Line} from 'react-native-responsive-linechart/lib/Line';
 import AssessmentAPI from '../api/AssessmentAPI';
 import {jsonArrayToData} from '../utils/Utility';
-
+import {capitalize} from '../utils/Utility';
 import {AuthContext} from '../components/context';
 
 const Profile = (props) => {
   const goToUsePoint = () => {
     props.navigation.navigate('UsePoint');
   };
+
+  const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [dataFeel, setDataFeel] = useState([{x: 0, y: 0}]);
   const [dataWork, setDataWork] = useState([{x: 0, y: 0}]);
 
   const {signOut} = React.useContext(AuthContext);
 
+  const getUsertoState = async () => {
+    try {
+      const name = await AsyncStorage.getItem('userName');
+      setUsername(capitalize(name));
+
+      //   //TODO: currently gets a static test users data.
+      //   const assementDatas = AssessmentAPI().getUserAssessments(
+      //     '606c9a4094c4d13c0cbfd43a',
+      //     '6026848f720e2f5db8c09ca9',
+      //   );
+      //   let datas = jsonArrayToData(assementDatas);
+      //   if (datas.dataWorkload.length > 0) {
+      //     setDataWork(datas.dataWorkload);
+      //   }
+      //   if (datas.dataFeeling.length > 0) {
+      //     setDataFeel(datas.dataFeeling);
+      //   }
+    } catch (err) {
+      console.log('Error in Profile: ', err);
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     //TODO: currently gets a static test users data.
+    getUsertoState();
+
     AssessmentAPI()
       .getUserAssessments(
         '606c9a4094c4d13c0cbfd43a',
@@ -49,6 +76,7 @@ const Profile = (props) => {
         setLoading(false);
       })
       .catch((e) => console.log(e));
+    // setLoading(false);
   }, []);
   return (
     <SafeAreaView style={{backgroundColor: 'white'}}>
@@ -60,7 +88,7 @@ const Profile = (props) => {
               uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
             }}
           />
-          <Text style={styles.name}>John Doe</Text>
+          <Text style={styles.name}>{username}</Text>
 
           <View style={styles.statistics}>
             <View style={styles.statisticsItem}>
