@@ -43,6 +43,7 @@ server.use((req, res, next) => {
 
 server.post('/userVouchersArray', function (req, res, next) {
   const error = validateItem(req.body);
+  console.log('Error la gi? ', error);
   if (error) {
     res.status(400).send(error);
   } else {
@@ -71,9 +72,11 @@ function createSlug(value) {
 }
 
 function validateItem(item) {
-  console.log('DCMM: ', item);
+  console.log('DCMM apiServer.js : ', item.id);
   if (!item.description) return 'Description is required.';
   if (!item.date) return 'Date is required.';
+  if (!item.senderID) return 'Sender is required.';
   if (!item.id) return 'ID is required.';
+
   return '';
 }

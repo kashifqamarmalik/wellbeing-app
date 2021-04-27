@@ -13,7 +13,7 @@ const VouchersList = (props) => {
           <Voucher
             description={item.description}
             time={item.date}
-            requestId={item._id}
+            requestId={item.id}
             updateAvailableVouchers={props.updateAvailableVouchers}
             flag={props.flag ? props.flag : null}
           />

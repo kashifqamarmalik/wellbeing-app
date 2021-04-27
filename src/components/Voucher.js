@@ -4,12 +4,9 @@ import {ListItem as BaseListItem, Left, Right, Text} from 'native-base';
 import {StyleSheet, Modal, View} from 'react-native';
 import CustomButton from './CustomButton';
 import {comparer} from '../utils/Utility';
-import {
-  getSpecificVoucher,
-  getAllVouchers,
-  postVoucher,
-} from '../api/VoucherAPI';
+import {getSpecificVoucher, postVoucher} from '../api/VoucherAPI';
 import {RequestContext} from '../context/RequestContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Voucher = (props) => {
   const {vouchers, setVouchers} = React.useContext(RequestContext);
@@ -19,10 +16,16 @@ const Voucher = (props) => {
 
   const updateNewList = async (id) => {
     try {
+      console.log(id);
       const temp = [...vouchers];
-      const selectedItem = temp.find((el) => el._id === id);
-      postVoucher(selectedItem);
-      let userId = 'testing_ID';
+      let selectedItem = temp.find((el) => el.id === id);
+      let userId = await AsyncStorage.getItem('userid');
+      const newIDitem = Date.now();
+      selectedItem = {...selectedItem, id: newIDitem, senderID: userId};
+      console.log('DCMM: ', selectedItem);
+      setTimeout(() => {
+        postVoucher(selectedItem);
+      }, 0);
       let newUserVoucherList = await getSpecificVoucher(userId);
       setTimeout(() => {
         setUserVouchers(newUserVoucherList.reverse());
@@ -31,11 +34,9 @@ const Voucher = (props) => {
       setTimeout(() => {
         setVouchers(finale);
       }, 0);
-      // setVouchers(finale.reverse());
       setTimeout(() => {
         setModalVisible(!modalVisible);
-      }, 0);
-      // setModalVisible(!modalVisible);
+      }, 200);
     } catch (e) {
       throw new Error(e);
     }
