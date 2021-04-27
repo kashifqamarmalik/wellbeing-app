@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
-const RequestContext = React.createContext([{}, () => {}]);
+import {availVouchersArray, userVouchersArray} from '../model/vouchers';
 
+const RequestContext = React.createContext([{}, () => {}]);
 const requestArray = [];
-const vouchersArray = [];
 
 const RequestProvider = (props) => {
   const [requests, setRequests] = useState(requestArray);
   const [userRequests, setUserRequests] = useState(requestArray);
-  const [vouchers, setVouchers] = useState(vouchersArray);
-  const [userVouchers, setUserVouchers] = useState(vouchersArray);
+  const [vouchers, setVouchers] = useState(availVouchersArray);
+  const [userVouchers, setUserVouchers] = useState(userVouchersArray);
 
   return (
     <RequestContext.Provider

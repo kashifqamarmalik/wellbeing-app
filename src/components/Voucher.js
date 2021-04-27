@@ -12,38 +12,13 @@ const Voucher = (props) => {
   const [press, setPress] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
 
-  const getUserVouchers = async () => {
+  const updateNewList = async (id) => {
     try {
-      let userId = 'testing_ID';
-      let data = await getSpecificVoucher(userId);
-      console.log('after added, User vouchers are: ', data);
-      setUserVouchers(data.reverse());
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-
-  const getVoucherList = async () => {
-    try {
-      // subtract NEW 'user vouchers' from 'all vouchers'
-      let finalizedData = vouchers.filter(comparer(userVouchers));
-
-      console.log(finalizedData);
-      setVouchers(finalizedData.reverse());
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-
-  const updateRequest = async () => {
-    try {
-      // Update data in server
-      // ...API here...
-      console.log('Item added to your Voucher');
-
-      // Update data in client
-      getUserVouchers();
-      getVoucherList();
+      const temp = [...vouchers];
+      const selectedItem = temp.find((el) => el._id === id);
+      setUserVouchers((prev) => {
+        return [...prev, selectedItem];
+      });
       setModalVisible(!modalVisible);
     } catch (e) {
       throw new Error(e);
@@ -70,7 +45,10 @@ const Voucher = (props) => {
                   onPress={() => setModalVisible(!modalVisible)}
                   style={{marginRight: 10, backgroundColor: 'red'}}
                 />
-                <CustomButton title="YES" onPress={() => updateRequest()} />
+                <CustomButton
+                  title="YES"
+                  onPress={() => updateNewList(props.requestId)}
+                />
               </View>
             </View>
           </View>
