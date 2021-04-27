@@ -3,7 +3,12 @@ import React from 'react';
 import {ListItem as BaseListItem, Left, Right, Text} from 'native-base';
 import {StyleSheet, Modal, View} from 'react-native';
 import CustomButton from './CustomButton';
-import {getSpecificVoucher, getAllVouchers} from '../api/VoucherAPI';
+import {comparer} from '../utils/Utility';
+import {
+  getSpecificVoucher,
+  getAllVouchers,
+  postVoucher,
+} from '../api/VoucherAPI';
 import {RequestContext} from '../context/RequestContext';
 
 const Voucher = (props) => {
@@ -16,10 +21,21 @@ const Voucher = (props) => {
     try {
       const temp = [...vouchers];
       const selectedItem = temp.find((el) => el._id === id);
-      setUserVouchers((prev) => {
-        return [...prev, selectedItem];
-      });
-      setModalVisible(!modalVisible);
+      postVoucher(selectedItem);
+      let userId = 'testing_ID';
+      let newUserVoucherList = await getSpecificVoucher(userId);
+      setTimeout(() => {
+        setUserVouchers(newUserVoucherList.reverse());
+      }, 0);
+      let finale = vouchers.filter(comparer(newUserVoucherList));
+      setTimeout(() => {
+        setVouchers(finale);
+      }, 0);
+      // setVouchers(finale.reverse());
+      setTimeout(() => {
+        setModalVisible(!modalVisible);
+      }, 0);
+      // setModalVisible(!modalVisible);
     } catch (e) {
       throw new Error(e);
     }
