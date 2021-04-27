@@ -5,7 +5,10 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "run-p start:dev start:api",
+    "start:dev": "react-native start",
+    "prestart:api": "node src/tools/createMockDb.js",
+    "start:api": "node src/tools/apiServer.js",
     "test": "jest",
     "lint": "eslint ."
   },
@@ -45,7 +48,9 @@
     "babel-jest": "25.5.1",
     "eslint": "6.8.0",
     "jest": "25.5.4",
+    "json-server": "^0.16.3",
     "metro-react-native-babel-preset": "0.59.0",
+    "npm-run-all": "^4.1.5",
     "react-test-renderer": "16.13.1"
   },
   "jest": {

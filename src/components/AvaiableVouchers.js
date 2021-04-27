@@ -9,33 +9,32 @@ import {comparer} from '../utils/Utility';
 const AvaiableVouchers = (props) => {
   const {vouchers, setVouchers} = React.useContext(RequestContext);
   const {userVouchers, setUserVouchers} = React.useContext(RequestContext);
-  const [finalizedData, setFinalizedData] = React.useState([]);
+
   React.useEffect(() => {
     const getVoucherList = async () => {
       try {
         // Get all vouchers
-        // let data = await getAllVouchers();
+        let data = await getAllVouchers();
 
         // // Get user vouchers
-        // let userId = 'testing_ID';
-        // let subtractData = await getSpecificVoucher(userId);
-        // setUserVouchers(subtractData);
+        let userId = 'testing_ID';
+        let subtractData = await getSpecificVoucher(userId);
+        setUserVouchers(subtractData.reverse());
 
         // subtract 'user vouchers' from 'all vouchers'
-        let finale = vouchers.filter(comparer(userVouchers));
-        console.log(finale);
+        let finale = data.filter(comparer(subtractData));
 
-        setFinalizedData(finale.reverse());
+        setVouchers(finale.reverse());
       } catch (e) {
         console.log(e.message);
       }
     };
     getVoucherList();
-  }, [setFinalizedData]);
+  }, [setVouchers]);
 
   return (
     <Container>
-      <AvaiableVouchersList itemList={finalizedData} />
+      <AvaiableVouchersList itemList={vouchers} />
     </Container>
   );
 };
