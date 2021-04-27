@@ -2,35 +2,70 @@ const availVouchersArray = [
   {
     description: 'Voucher 1',
     date: '19-01-2021',
-    id: 0,
-  },
-  {
-    description: 'Voucher 2',
-    date: '19-01-2021',
     id: 1,
   },
   {
-    description: 'Voucher 3',
+    description: 'Asim Voucher',
     date: '19-01-2021',
     id: 2,
   },
   {
-    description: 'Voucher 4',
-    date: '21-01-2021',
+    description: 'Kashif Voucher',
+    date: '19-01-2021',
     id: 3,
   },
   {
-    description: 'Your Voucher',
+    description: 'Nhan Voucher',
     date: '19-01-2021',
     id: 4,
+  },
+  {
+    description: 'Ngoc Voucher',
+    date: '19-01-2021',
+    id: 5,
+  },
+  {
+    description: 'Jani Voucher',
+    date: '19-01-2021',
+    id: 6,
   },
 ];
 
 const userVouchersArray = [
   {
-    description: 'Your Voucher',
+    description: 'Asim Voucher',
+    date: '19-01-2021',
+    id: 2,
+    senderID: '608041de2abcce6f6cc2f72b',
+    slug: 'asim-voucher',
+  },
+  {
+    description: 'Kashif Voucher',
+    date: '19-01-2021',
+    id: 3,
+    senderID: '608041fe2abcce6f6cc2f72c',
+    slug: 'kashif-voucher',
+  },
+  {
+    description: 'Nhan Voucher',
     date: '19-01-2021',
     id: 4,
+    senderID: '608042262abcce6f6cc2f72d',
+    slug: 'nhan-voucher',
+  },
+  {
+    description: 'Misty Voucher',
+    date: '19-01-2021',
+    id: 5,
+    senderID: '608041952abcce6f6cc2f72a',
+    slug: 'misty-voucher',
+  },
+  {
+    description: 'Jani Voucher',
+    date: '19-01-2021',
+    id: 6,
+    senderID: '6080423e2abcce6f6cc2f72e',
+    slug: 'jani-voucher',
   },
 ];
 

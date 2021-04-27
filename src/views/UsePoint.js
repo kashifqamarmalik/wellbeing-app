@@ -8,20 +8,10 @@ import SegmentedControlTab from 'react-native-segmented-control-tab';
 
 const Reach = () => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  // const [avaiableVouchers, setAvaiableVoucher] = React.useState(ListOfVoucher);
-  // const [yourVouchers, setYourVouchers] = React.useState([]);
 
   const handleSingleIndexSelect = (index) => {
     setSelectedIndex(index);
   };
-
-  // const updateAvailableVouchers = (id) => {
-  //   const tempAvailList = [...avaiableVouchers];
-  //   const newAvailList = tempAvailList.filter((el) => el._id !== id);
-  //   const addedItem = tempAvailList.filter((el) => el._id == id);
-  //   setAvaiableVoucher(newAvailList);
-  //   setYourVouchers([...yourVouchers, addedItem]);
-  // };
 
   return (
     <Container>
@@ -34,17 +24,8 @@ const Reach = () => {
         tabTextStyle={styles.text}
         tabsContainerStyle={styles.container}
       />
-      {selectedIndex === 0 && (
-        <AvaiableVouchers
-        // list={avaiableVouchers}
-        // updateAvailableVouchers={updateAvailableVouchers}
-        />
-      )}
-      {selectedIndex === 1 && (
-        <YourPoints
-        // list={yourVouchers}
-        />
-      )}
+      {selectedIndex === 0 && <AvaiableVouchers />}
+      {selectedIndex === 1 && <YourPoints />}
     </Container>
   );
 };

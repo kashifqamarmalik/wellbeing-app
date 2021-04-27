@@ -4,7 +4,7 @@ let config = require('../config.js');
 
 //const baseURL = 'http://localhost:8066/api';
 //const baseURL = `http://${config.testing.ip}:${config.testing.port}/api`;
-const baseURL = 'http://192.168.10.106:3001';
+const baseURL = `http://${config.testing.ip}:${config.mockAPI.port}`;
 
 const getAllVouchers = async () => {
   try {
@@ -18,6 +18,7 @@ const getAllVouchers = async () => {
 
 const postVoucher = async (item) => {
   try {
+    console.log('in post voucher API: ', item);
     const res = await fetch(baseURL + '/userVouchersArray/', {
       method: 'POST',
       headers: {'content-type': 'application/json'},
@@ -35,7 +36,9 @@ const postVoucher = async (item) => {
 
 const getSpecificVoucher = async (id) => {
   try {
-    const requests = await fetch(baseURL + '/userVouchersArray');
+    const requests = await fetch(
+      baseURL + '/userVouchersArray' + `/?senderID=${id}`,
+    );
     const json = await requests.json();
 
     return json;

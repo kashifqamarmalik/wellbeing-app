@@ -5,6 +5,7 @@ import AvaiableVouchersList from './VouchersList';
 import {getAllVouchers, getSpecificVoucher} from '../api/VoucherAPI';
 import {RequestContext} from '../context/RequestContext';
 import {comparer} from '../utils/Utility';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const AvaiableVouchers = (props) => {
   const {vouchers, setVouchers} = React.useContext(RequestContext);
@@ -17,7 +18,7 @@ const AvaiableVouchers = (props) => {
         let data = await getAllVouchers();
 
         // // Get user vouchers
-        let userId = 'testing_ID';
+        let userId = await AsyncStorage.getItem('userid');
         let subtractData = await getSpecificVoucher(userId);
         setUserVouchers(subtractData.reverse());
 
