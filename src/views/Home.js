@@ -12,7 +12,10 @@ const Home = ({navigation}) => {
           title="Quick Assesment"
           onPress={() => navigation.navigate('HomeQuiz')}
         />
-        <CustomButton title="View Assesment" />
+        <CustomButton
+          title="View Assesment"
+          onPress={() => navigation.navigate('ViewQuiz')}
+        />
       </View>
 
       <View style={styles.calendar}>

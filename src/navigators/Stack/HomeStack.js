@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Home from '../../views/Home';
 import HomeQuiz from '../../views/HomeQuiz';
+import ViewQuiz from '../../views/ViewQuiz';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,19 @@ const HomeStack = () => {
             },
             headerTintColor: '#FFFFFF',
             title: 'The Quiz',
+            //Header title
+          }}
+        />
+        <Stack.Screen
+          name="ViewQuiz"
+          component={ViewQuiz}
+          options={{
+            //Header customization of the perticular Screen
+            headerStyle: {
+              backgroundColor: '#183693',
+            },
+            headerTintColor: '#FFFFFF',
+            title: 'Your Assessments',
             //Header title
           }}
         />
