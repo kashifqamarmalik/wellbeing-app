@@ -21,7 +21,7 @@ const HomeStack = () => {
               backgroundColor: '#183693',
             },
             headerTintColor: '#FFFFFF',
-            title: 'Wellbeing',
+            title: 'Mindscape',
             //Header title
           }}
         />
@@ -34,7 +34,7 @@ const HomeStack = () => {
               backgroundColor: '#183693',
             },
             headerTintColor: '#FFFFFF',
-            title: 'The Quiz',
+            title: 'Assessment',
             //Header title
           }}
         />

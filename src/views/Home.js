@@ -9,11 +9,11 @@ const Home = ({navigation}) => {
     <View>
       <View style={styles.button}>
         <CustomButton
-          title="Quick Assesment"
+          title="Asses"
           onPress={() => navigation.navigate('HomeQuiz')}
         />
         <CustomButton
-          title="View Assesment"
+          title="History"
           onPress={() => navigation.navigate('ViewQuiz')}
         />
       </View>

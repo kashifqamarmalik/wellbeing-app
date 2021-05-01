@@ -7,6 +7,7 @@ import React, {useEffect, useState} from 'react';
 import RadioButtonRN from 'radio-buttons-react-native';
 import UserAPI from '../api/UserAPI';
 import {Question} from '../data/Question';
+import Slider from '@react-native-community/slider';
 
 const HomeQuiz = () => {
   const [quiz, setQuiz] = useState();
@@ -48,24 +49,6 @@ const HomeQuiz = () => {
     getData();
   }, [quiz]);
 
-  const op1 = [
-    {
-      label: max1,
-    },
-    {
-      label: min1,
-    },
-  ];
-
-  const op2 = [
-    {
-      label: max2,
-    },
-    {
-      label: min2,
-    },
-  ];
-
   let a1 = new Question(
     '60268600a5369fd7c2e0e19f',
     'How are you feeling?',
@@ -105,28 +88,6 @@ const HomeQuiz = () => {
 
   return (
     <View>
-      <Text style={styles.question}>{q1}</Text>
-      <RadioButtonRN
-        data={op1}
-        selectedBtn={(e) => {
-          if (e === 'Good') {
-            setScore1(10);
-          } else {
-            setScore1(0);
-          }
-        }}
-      />
-      <Text style={styles.question}>{q2}</Text>
-      <RadioButtonRN
-        data={op2}
-        selectedBtn={(e) => {
-          if (e === 'Low') {
-            setScore2(10);
-          } else {
-            setScore2(0);
-          }
-        }}
-      />
       <TextInput
         multiline={true}
         numberOfLines={4}
@@ -135,6 +96,40 @@ const HomeQuiz = () => {
         value={comment}
         onChangeText={setComment}
       />
+      <Text style={styles.question}>
+        Please rate your personal feeling towards workload.
+      </Text>
+      <Text style={styles.question}>{score1}</Text>
+
+      <View style={styles.container}>
+        <Slider
+          maximumValue={10}
+          minimumValue={0}
+          minimumTrackTintColor="#307ecc"
+          maximumTrackTintColor="#000000"
+          step={1}
+          value={score1}
+          onValueChange={(score1) => setScore1(score1)}
+        />
+      </View>
+
+      <Text style={styles.question}>
+        Please rate the intensity of the workload.
+      </Text>
+      <Text style={styles.question}>{score2}</Text>
+
+      <View style={styles.container}>
+        <Slider
+          maximumValue={10}
+          minimumValue={0}
+          minimumTrackTintColor="#307ecc"
+          maximumTrackTintColor="#000000"
+          step={1}
+          value={score2}
+          onValueChange={(score2) => setScore2(score2)}
+        />
+      </View>
+
       <CustomButton
         title="Submit"
         onPress={() => {
@@ -147,12 +142,7 @@ const HomeQuiz = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingLeft: '15%',
-    paddingTop: '7%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
+    padding: '12%',
   },
   viewButton: {
     backgroundColor: '#ade8f4',
@@ -191,8 +181,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#023e8a',
     fontWeight: 'bold',
-    fontSize: 23,
-    marginTop: '10%',
+    fontSize: 20,
+
+    padding: '1%',
   },
   nameText: {
     textAlign: 'left',
