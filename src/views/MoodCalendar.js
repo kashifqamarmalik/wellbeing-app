@@ -38,7 +38,7 @@ const MoodCalendar = () => {
     getAsssessments();
   }, [AssArray]);
 
-  const dates = AssArray.map((x) => x.date_time);
+  const answers1 = AssArray.map((x) => x.answers[0]);
 
   return (
     <View style={{backgroundColor: 'lightblue'}}>
