@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, View, Button} from 'native-base';
 import CustomButton from '../components/CustomButton';
 import {Calendar} from 'react-native-plain-calendar';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AssessmentAPI from '../api/AssessmentAPI';
@@ -50,7 +50,7 @@ const Home = ({navigation}) => {
   const a = sum1;
   const b = sum2;
   return (
-    <View>
+    <ScrollView>
       <View style={styles.button}>
         <TouchableOpacity
           style={styles.buttonStyle}
@@ -92,7 +92,7 @@ const Home = ({navigation}) => {
           {x: 'Feeling', y: b},
         ]}
       />
-    </View>
+    </ScrollView>
   );
 };
 

@@ -20,9 +20,13 @@ const Voucher = (props) => {
       const temp = [...vouchers];
       let selectedItem = temp.find((el) => el.id === id);
       let userId = await AsyncStorage.getItem('userid');
-      const newIDitem = Date.now();
-      selectedItem = {...selectedItem, id: newIDitem, senderID: userId};
-      console.log('DCMM: ', selectedItem);
+      const newIDitem = Date.now();//Create new ID for item 
+      selectedItem = {
+        ...selectedItem,
+        id: newIDitem,
+        senderID: userId,
+        itemID: `${selectedItem.id}`,
+      };
       setTimeout(() => {
         postVoucher(selectedItem);
       }, 0);
