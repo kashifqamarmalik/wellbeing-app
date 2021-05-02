@@ -15,7 +15,8 @@ import {VerticalAxis} from 'react-native-responsive-linechart/lib/VerticalAxis';
 import {HorizontalAxis} from 'react-native-responsive-linechart/lib/HorizontalAxis';
 import {Line} from 'react-native-responsive-linechart/lib/Line';
 import AssessmentAPI from '../api/AssessmentAPI';
-import {capitalize, jsonArrayToData} from '../utils/Utility';
+import {jsonArrayToData} from '../utils/Utility';
+import {capitalize} from '../utils/Utility';
 import {AuthContext} from '../components/context';
 
 const Profile = (props) => {
@@ -23,52 +24,60 @@ const Profile = (props) => {
     props.navigation.navigate('UsePoint');
   };
 
-  const [username, setUsername] = useState(undefined);
-  const [userId, setUserId] = useState(undefined);
+  const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(false);
   const [dataFeel, setDataFeel] = useState([{x: 0, y: 0}]);
   const [dataWork, setDataWork] = useState([{x: 0, y: 0}]);
 
   const {signOut} = React.useContext(AuthContext);
 
-  const getUserId = async () => {
+  const getUsertoState = async () => {
     try {
-      return await AsyncStorage.getItem('userid');
-    } catch (err) {
-      console.log('Error in Profile: ', err);
-    }
-  };
+      const name = await AsyncStorage.getItem('userName');
+      setUsername(capitalize(name));
 
-  const getUsername = async () => {
-    try {
-      return await AsyncStorage.getItem('userName');
+      //   //TODO: currently gets a static test users data.
+      //   const assementDatas = AssessmentAPI().getUserAssessments(
+      //     '606c9a4094c4d13c0cbfd43a',
+      //     '6026848f720e2f5db8c09ca9',
+      //   );
+      //   let datas = jsonArrayToData(assementDatas);
+      //   if (datas.dataWorkload.length > 0) {
+      //     setDataWork(datas.dataWorkload);
+      //   }
+      //   if (datas.dataFeeling.length > 0) {
+      //     setDataFeel(datas.dataFeeling);
+      //   }
     } catch (err) {
       console.log('Error in Profile: ', err);
     }
   };
 
   useEffect(() => {
-    getUsername().then((name) => setUsername(capitalize(name)));
-    getUserId().then((id) => {
-      setUserId(id);
-    });
+    setLoading(true);
+    //TODO: currently gets a static test users data.
+    getUsertoState();
+
+    AssessmentAPI()
+      .getUserAssessments(
+        '6080423e2abcce6f6cc2f72e',
+        '6026848f720e2f5db8c09ca9',
+      )
+      .then((res) => {
+        let datas = jsonArrayToData(res);
+        if (datas.dataWorkload.length > 0) {
+          setDataWork(datas.dataWorkload);
+        }
+        if (datas.dataFeeling.length > 0) {
+          setDataFeel(datas.dataFeeling);
+        }
+      })
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((e) => console.log(e));
+    // setLoading(false);
   }, []);
-
-  useEffect(() => {
-    if (userId !== undefined) {
-      AssessmentAPI()
-        .getUserAssessments(userId, '6026848f720e2f5db8c09ca9')
-        .then((res) => {
-          let datas = jsonArrayToData(res);
-          if (datas.dataWorkload.length > 0) {
-            setDataWork(datas.dataWorkload);
-          }
-          if (datas.dataFeeling.length > 0) {
-            setDataFeel(datas.dataFeeling);
-          }
-        })
-        .catch((e) => console.log(e));
-    }
-  }, [userId]);
   return (
     <SafeAreaView style={{backgroundColor: 'white'}}>
       <ScrollView>
@@ -79,11 +88,8 @@ const Profile = (props) => {
               uri: 'https://bootdey.com/img/Content/avatar/avatar6.png',
             }}
           />
-          {username ? (
-            <Text style={styles.name}>{username}</Text>
-          ) : (
-            <Text style={styles.name}>Loading username</Text>
-          )}
+          <Text style={styles.name}>{username}</Text>
+
           <View style={styles.statistics}>
             <View style={styles.statisticsItem}>
               <Text style={styles.text}>Current Points</Text>
@@ -91,7 +97,7 @@ const Profile = (props) => {
             </View>
             <View style={styles.statisticsItem}>
               <Text style={styles.text}>Surveys Taken</Text>
-              <Text style={styles.text}>{dataFeel.length}</Text>
+              <Text style={styles.text}>7</Text>
             </View>
           </View>
           <View>
@@ -101,12 +107,6 @@ const Profile = (props) => {
                 goToUsePoint();
               }}
             />
-          </View>
-          <View>
-            <Text style={styles.text}>
-              Below is your assessment results for the current week, from Sunday
-              to Saturday
-            </Text>
           </View>
           <View style={{marginTop: '10%'}}>
             <Chart
@@ -127,10 +127,6 @@ const Profile = (props) => {
                 theme={{stroke: {color: 'blue', width: 1.5}}}
               />
             </Chart>
-            <View>
-              <Text style={styles.text}>Red: workload</Text>
-              <Text style={styles.text}>Blue: feeling</Text>
-            </View>
             <CustomButton
               style={{backgroundColor: 'red', marginTop: '10%'}}
               title="           Sign Out           "
