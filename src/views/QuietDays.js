@@ -5,6 +5,7 @@ import {
   TextInput,
   FlatList,
   Animated,
+  Modal,
 } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import AssessmentAPI from '../api/AssessmentAPI';
@@ -14,7 +15,9 @@ import RadioButtonRN from 'radio-buttons-react-native';
 import UserAPI from '../api/UserAPI';
 import {Question} from '../data/Question';
 
-const ViewQuiz = () => {
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+
+const QuietDays = () => {
   const [AssArray, setAssArray] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -37,75 +40,62 @@ const ViewQuiz = () => {
     getAsssessments();
   }, [AssArray]);
 
-  const ans1 = AssArray.map((x) => x.answers[0]);
-  const score1 = ans1.map((x) => x.score);
-  const num1 = score1.map((x) => x.$numberDecimal);
+  const dates = AssArray.map((x) => x.date_time);
+
   return (
-    <View>
-      <FlatList
-        keyExtractor={(assessment) => assessment._id}
-        data={AssArray}
-        renderItem={({item}) => {
-          var fullDate;
-          const d = item.date_time;
-          const month = d.slice(6, 7);
-          const day = d.slice(9, 10);
+    <View style={{backgroundColor: 'lightblue'}}>
+      <Text
+        style={{
+          fontWeight: '700',
+          margin: '5%',
+          marginTop: '8%',
+          marginBottom: '8%',
+        }}>
+        Quiet days are days without significant activity outside your regular
+        working hours of 8:00 AM to 5:00 PM.{' '}
+      </Text>
 
-          switch (month) {
-            case '01':
-              fullDate = 'January' + day + ', 2021';
-              break;
-            case '02':
-              fullDate = 'Febraury' + day + ', 2021';
-              break;
-            case '03':
-              fullDate = 'March' + day + ', 2021';
-              break;
-            case '04':
-              fullDate = 'April' + day + ', 2021';
-              break;
-            case '05':
-              fullDate = 'May' + day + ', 2021';
-              break;
-            case '06':
-              fullDate = 'June' + day + ', 2021';
-              break;
-            case '07':
-              fullDate = 'July' + day + ', 2021';
-            case '08':
-              fullDate = 'August' + day + ', 2021';
-            case '09':
-              fullDate = 'September' + day + ', 2021';
-            case '10':
-              fullDate = 'October' + day + ', 2021';
+      <Text style={{fontSize: 17, fontWeight: 'bold', margin: '3%'}}>
+        Past 4 week trend
+      </Text>
+      <View style={{flexDirection: 'row', marginBottom: '5%'}}>
+        <View style={{margin: '3%'}}>
+          <Text style={{color: 'green', fontWeight: 'bold'}}>_____</Text>
+          <Text style={{fontSize: 17, fontWeight: 'bold'}}>
+            Quiet Hours kept on:
+          </Text>
+          <Text>14 days</Text>
+        </View>
 
-            case '11':
-              fullDate = 'Novemeber' + day + ', 2021';
+        <View style={{marginLeft: '5%'}}>
+          <Text style={{color: 'white', fontWeight: 'bold'}}>_____</Text>
+          <Text style={{fontSize: 17, fontWeight: 'bold'}}>
+            Quiet Hours lost on:
+          </Text>
+          <Text>10 days</Text>
+        </View>
+      </View>
 
-            case '12':
-              fullDate = 'December' + day + ', 2021';
-          }
-          return (
-            <View style={styles.questionItem}>
-              <Text style={styles.createSurvey}>May {day}, 2021</Text>
-              <Text style={styles.chooseText}>
-                Feeling: {item.answers[0].score.$numberDecimal} - Workload:{' '}
-                {item.answers[1].score.$numberDecimal}
-              </Text>
-
-              <Text
-                style={{
-                  textAlign: 'center',
-                  color: '#023e8a',
-                  fontWeight: 'bold',
-                  fontSize: 20,
-                  width: '100%',
-                  marginBottom: 20,
-                }}>
-                Comment: {item.comment}
-              </Text>
-            </View>
-          );
+      <Calendar
+        // Dummy data is being used to display the functionality and idea. Because we do not have data for usage from past months.
+        markedDates={{
+          '2021-05-01': {selected: true, selectedColor: 'green'},
+          '2021-05-03': {selected: true, selectedColor: 'green'},
+          '2021-05-04': {selected: true, selectedColor: 'green'},
+          '2021-04-17': {selected: true, selectedColor: 'green'},
+          '2021-04-28': {selected: true, selectedColor: 'green'},
+          '2021-04-23': {selected: true, selectedColor: 'green'},
+          '2021-04-16': {selected: true, selectedColor: 'green'},
+          '2021-04-19': {selected: true, selectedColor: 'green'},
+          '2021-04-21': {selected: true, selectedColor: 'green'},
+          '2021-04-05': {selected: true, selectedColor: 'green'},
+          '2021-04-08': {selected: true, selectedColor: 'green'},
+          '2021-04-01': {selected: true, selectedColor: 'green'},
+          '2021-04-02': {selected: true, selectedColor: 'green'},
+          '2021-04-10': {selected: true, selectedColor: 'green'},
+          '2021-04-12': {selected: true, selectedColor: 'green'},
+          '2021-04-25': {selected: true, selectedColor: 'green'},
+          '2021-04-26': {selected: true, selectedColor: 'green'},
         }}
       />
     </View>
@@ -224,4 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewQuiz;
+export default QuietDays;

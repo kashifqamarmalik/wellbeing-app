@@ -27,21 +27,17 @@ const Home = ({navigation}) => {
       <View style={styles.button1}>
         <TouchableOpacity
           style={styles.buttonStyle}
-          onPress={() => navigation.navigate('HomeQuiz')}>
+          onPress={() => navigation.navigate('QuietDays')}>
           <Text style={styles.textStyle}>Quiet Days</Text>
           <Ionicons name="mic-off" size={100} />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.buttonStyle1}
-          onPress={() => navigation.navigate('ViewQuiz')}>
+          onPress={() => navigation.navigate('Calendar')}>
           <Text style={styles.textStyle}>Mood Calender</Text>
           <Ionicons name="calendar" size={100} />
         </TouchableOpacity>
-      </View>
-
-      <View style={styles.calendar}>
-        <Calendar />
       </View>
     </View>
   );

@@ -60,7 +60,7 @@ const Profile = (props) => {
 
     AssessmentAPI()
       .getUserAssessments(
-        '606c9a4094c4d13c0cbfd43a',
+        '6080423e2abcce6f6cc2f72e',
         '6026848f720e2f5db8c09ca9',
       )
       .then((res) => {

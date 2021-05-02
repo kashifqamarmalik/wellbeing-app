@@ -14,13 +14,13 @@ import RadioButtonRN from 'radio-buttons-react-native';
 import UserAPI from '../api/UserAPI';
 import {Question} from '../data/Question';
 
-const ViewQuiz = () => {
+const Calendar = () => {
   const [AssArray, setAssArray] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   async function getAsssessments() {
     const res = AssessmentAPI().getUserAssessments(
-      '608041952abcce6f6cc2f72a',
+      '6080423e2abcce6f6cc2f72e',
       '6026848f720e2f5db8c09ca9',
     );
     res
@@ -224,4 +224,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewQuiz;
+export default Calendar;

@@ -5,7 +5,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../../views/Home';
 import HomeQuiz from '../../views/HomeQuiz';
 import ViewQuiz from '../../views/ViewQuiz';
-
+import QuietDays from '../../views/QuietDays';
+import Calendar from '../../views/Calendar';
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
@@ -48,6 +49,32 @@ const HomeStack = () => {
             },
             headerTintColor: '#FFFFFF',
             title: 'Your Assessments',
+            //Header title
+          }}
+        />
+        <Stack.Screen
+          name="QuietDays"
+          component={QuietDays}
+          options={{
+            //Header customization of the perticular Screen
+            headerStyle: {
+              backgroundColor: '#183693',
+            },
+            headerTintColor: '#FFFFFF',
+            title: 'Quiet Days',
+            //Header title
+          }}
+        />
+        <Stack.Screen
+          name="Calendar"
+          component={Calendar}
+          options={{
+            //Header customization of the perticular Screen
+            headerStyle: {
+              backgroundColor: '#183693',
+            },
+            headerTintColor: '#FFFFFF',
+            title: 'Mood Calendar',
             //Header title
           }}
         />
