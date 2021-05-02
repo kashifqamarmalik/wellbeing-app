@@ -47,6 +47,7 @@ const Profile = (props) => {
         });
     }, []);
 
+
     useEffect(() => {
         if (userId !== undefined) {
             AssessmentAPI()
