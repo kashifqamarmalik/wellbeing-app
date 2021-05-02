@@ -6,7 +6,7 @@ import Home from '../../views/Home';
 import HomeQuiz from '../../views/HomeQuiz';
 import ViewQuiz from '../../views/ViewQuiz';
 import QuietDays from '../../views/QuietDays';
-import Calendar from '../../views/Calendar';
+import MoodCalendar from '../../views/MoodCalendar';
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
@@ -66,8 +66,8 @@ const HomeStack = () => {
           }}
         />
         <Stack.Screen
-          name="Calendar"
-          component={Calendar}
+          name="MoodCalendar"
+          component={MoodCalendar}
           options={{
             //Header customization of the perticular Screen
             headerStyle: {

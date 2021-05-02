@@ -34,7 +34,7 @@ const Home = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.buttonStyle1}
-          onPress={() => navigation.navigate('Calendar')}>
+          onPress={() => navigation.navigate('MoodCalendar')}>
           <Text style={styles.textStyle}>Mood Calender</Text>
           <Ionicons name="calendar" size={100} />
         </TouchableOpacity>
