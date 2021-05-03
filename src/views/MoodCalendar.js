@@ -1,47 +1,11 @@
-import {Button, Text, View} from 'native-base';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  Animated,
-} from 'react-native';
-import CustomButton from '../components/CustomButton';
-import AssessmentAPI from '../api/AssessmentAPI';
-import {Assessment} from '../data/Assessment';
-import React, {useEffect, useState} from 'react';
-import RadioButtonRN from 'radio-buttons-react-native';
-import UserAPI from '../api/UserAPI';
-import {Question} from '../data/Question';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {Text, View} from 'native-base';
+import {ScrollView} from 'react-native';
+import React from 'react';
+import {Calendar} from 'react-native-calendars';
 
 const MoodCalendar = () => {
-  const [AssArray, setAssArray] = useState([]);
-  const [loaded, setLoaded] = useState(false);
-
-  async function getAsssessments() {
-    const res = AssessmentAPI().getUserAssessments(
-      '608041952abcce6f6cc2f72a',
-      '6026848f720e2f5db8c09ca9',
-    );
-    res
-      .then((res) => {
-        setAssArray(res);
-        setLoaded(true);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
-  }
-
-  useEffect(() => {
-    getAsssessments();
-  }, [AssArray]);
-
-  const answers1 = AssArray.map((x) => x.answers[0]);
-
   return (
-    <View style={{backgroundColor: 'lightblue'}}>
+    <ScrollView style={{backgroundColor: 'lightblue'}}>
       <Text
         style={{
           fontWeight: '700',
@@ -49,7 +13,7 @@ const MoodCalendar = () => {
           marginTop: '8%',
           marginBottom: '8%',
         }}>
-        Mood Calendar guages your mood on a day based on your ratings of
+        Mood Calendar gauges your mood on a day based on your ratings of
         personal feeling and workload.
       </Text>
 
@@ -107,120 +71,8 @@ const MoodCalendar = () => {
           '2021-04-01': {selected: true, selectedColor: 'orange'},
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: '3%',
-
-    justifyContent: 'center',
-  },
-  button: {
-    backgroundColor: '#ade8f4',
-    height: 50,
-    width: '60%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: '#000000',
-    marginTop: '5%',
-    marginLeft: '20%',
-  },
-  questionItem: {
-    backgroundColor: '#90e0ef',
-    height: 200,
-    margin: '3%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: '#000000',
-    marginTop: '5%',
-  },
-  typeButton: {
-    backgroundColor: '#ade8f4',
-    height: 50,
-    width: '33.5%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: '#000000',
-    marginTop: '5%',
-  },
-  buttonBottom: {
-    backgroundColor: '#ade8f4',
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: '#000000',
-    marginTop: '25%',
-  },
-  inputStyle: {
-    width: '80%',
-    marginBottom: '5%',
-    alignSelf: 'center',
-    borderColor: '#ccc',
-    borderBottomWidth: 1,
-    marginTop: '5%',
-  },
-  chooseText: {
-    textAlign: 'center',
-    color: '#023e8a',
-    fontWeight: 'bold',
-    fontSize: 20,
-    width: '100%',
-    marginBottom: 20,
-  },
-  createSurvey: {
-    textAlign: 'center',
-    color: '#023e8a',
-    fontWeight: 'bold',
-    fontSize: 25,
-    width: '100%',
-    marginBottom: 20,
-    marginTop: '7%',
-  },
-  inputQuestion: {
-    marginBottom: '5%',
-    textAlign: 'center',
-    borderColor: '#ccc',
-    height: 70,
-    width: '90%',
-
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: '#000000',
-  },
-  inputOption: {
-    margin: '11%',
-    textAlign: 'center',
-    borderColor: '#ccc',
-    height: 50,
-    width: '80%',
-    marginTop: '5%',
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: '#000000',
-  },
-  inputQN: {
-    marginBottom: '5%',
-    textAlign: 'center',
-    borderColor: '#ccc',
-    height: 50,
-    width: '20%',
-    marginTop: '5%',
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: '#000000',
-  },
-});
 
 export default MoodCalendar;

@@ -7,43 +7,58 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AssessmentAPI from '../api/AssessmentAPI';
 import {VictoryPie} from 'victory-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Home = ({navigation}) => {
   const [AssArray, setAssArray] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [userId, setUserId] = useState(undefined);
+
+  const getUserId = async () => {
+    try {
+      return await AsyncStorage.getItem('userid');
+    } catch (err) {
+      console.log('Error in Profile: ', err);
+    }
+  };
 
   async function getAsssessments() {
-    const res = AssessmentAPI().getUserAssessments(
-      '608041952abcce6f6cc2f72a',
-      '6026848f720e2f5db8c09ca9',
-    );
-    res
-      .then((res) => {
-        setAssArray(res);
-        setLoaded(true);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
+    if (userId !== undefined) {
+      const res = AssessmentAPI().getUserAssessments(
+        userId,
+        '6026848f720e2f5db8c09ca9',
+      );
+      res
+        .then((res) => {
+          setAssArray(res);
+          setLoaded(true);
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
   }
 
   useEffect(() => {
-    getAsssessments();
-  }, [AssArray]);
+    getUserId().then((id) => setUserId(id));
+  }, []);
+
+  useEffect(() => {
+    if (userId !== undefined) {
+      getAsssessments();
+    }
+  }, [userId]);
 
   const answers1 = AssArray.map((x) => x.answers[0]);
   const score1 = answers1.map((x) => parseInt(x.score.$numberDecimal));
 
   const answers2 = AssArray.map((x) => x.answers[1]);
   const score2 = answers2.map((x) => parseInt(x.score.$numberDecimal));
-  var sum1 = 0;
-  var sum2 = 0;
+  let sum1 = 0;
+  let sum2 = 0;
 
   for (var i = 0; i < score1.length; i++) {
     sum1 += score1[i];
-  }
-
-  for (var i = 0; i < score1.length; i++) {
     sum2 += score2[i];
   }
 

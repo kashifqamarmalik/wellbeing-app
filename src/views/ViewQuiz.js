@@ -1,26 +1,25 @@
-import {Button, Text, View} from 'native-base';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  FlatList,
-  Animated,
-} from 'react-native';
-import CustomButton from '../components/CustomButton';
+import {Text, View} from 'native-base';
+import {StyleSheet, FlatList} from 'react-native';
 import AssessmentAPI from '../api/AssessmentAPI';
-import {Assessment} from '../data/Assessment';
 import React, {useEffect, useState} from 'react';
-import RadioButtonRN from 'radio-buttons-react-native';
-import UserAPI from '../api/UserAPI';
-import {Question} from '../data/Question';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const ViewQuiz = () => {
   const [AssArray, setAssArray] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [userId, setUserId] = useState(undefined);
+
+  const getUserId = async () => {
+    try {
+      return await AsyncStorage.getItem('userid');
+    } catch (err) {
+      console.log('Error in Profile: ', err);
+    }
+  };
 
   async function getAsssessments() {
     const res = AssessmentAPI().getUserAssessments(
-      '608041952abcce6f6cc2f72a',
+      userId,
       '6026848f720e2f5db8c09ca9',
     );
     res
@@ -34,19 +33,24 @@ const ViewQuiz = () => {
   }
 
   useEffect(() => {
-    getAsssessments();
-  }, [AssArray]);
+    getUserId().then((id) => setUserId(id));
+  }, []);
+
+  useEffect(() => {
+    if (userId !== undefined) {
+      getAsssessments();
+    }
+  }, [userId]);
 
   const ans1 = AssArray.map((x) => x.answers[0]);
   const score1 = ans1.map((x) => x.score);
-  const num1 = score1.map((x) => x.$numberDecimal);
   return (
     <View>
       <FlatList
         keyExtractor={(assessment) => assessment._id}
         data={AssArray}
         renderItem={({item}) => {
-          var fullDate;
+          let fullDate;
           const d = item.date_time;
           const month = d.slice(6, 7);
           const day = d.slice(9, 10);
@@ -72,18 +76,22 @@ const ViewQuiz = () => {
               break;
             case '07':
               fullDate = 'July' + day + ', 2021';
+              break;
             case '08':
               fullDate = 'August' + day + ', 2021';
+              break;
             case '09':
               fullDate = 'September' + day + ', 2021';
+              break;
             case '10':
               fullDate = 'October' + day + ', 2021';
-
+              break;
             case '11':
-              fullDate = 'Novemeber' + day + ', 2021';
-
+              fullDate = 'November' + day + ', 2021';
+              break;
             case '12':
               fullDate = 'December' + day + ', 2021';
+              break;
           }
           return (
             <View style={styles.questionItem}>

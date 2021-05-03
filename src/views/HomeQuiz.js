@@ -1,16 +1,16 @@
-import {Button, Text, View} from 'native-base';
-import {StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {Text, View} from 'native-base';
+import {StyleSheet, TextInput, ScrollView} from 'react-native';
 import CustomButton from '../components/CustomButton';
 import AssessmentAPI from '../api/AssessmentAPI';
 import {Assessment} from '../data/Assessment';
 import React, {useEffect, useState} from 'react';
-import RadioButtonRN from 'radio-buttons-react-native';
-import UserAPI from '../api/UserAPI';
 import {Question} from '../data/Question';
 import Slider from '@react-native-community/slider';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const HomeQuiz = () => {
+const HomeQuiz = (props) => {
   const [quiz, setQuiz] = useState();
+  const [userId, setUserId] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
   const [q1, setQ1] = useState();
   const [max1, setMax1] = useState();
@@ -45,8 +45,19 @@ const HomeQuiz = () => {
       });
   }
 
+  const getUserId = async () => {
+    try {
+      return await AsyncStorage.getItem('userid');
+    } catch (err) {
+      console.log('Error in Profile: ', err);
+    }
+  };
+
   useEffect(() => {
     getData();
+    getUserId().then((id) => {
+      setUserId(id);
+    });
   }, [quiz]);
 
   let a1 = new Question(
@@ -74,20 +85,21 @@ const HomeQuiz = () => {
       answers,
       comment,
     );
-    assessment.setUserId('608041952abcce6f6cc2f72a');
+    assessment.setUserId(userId);
     assessment.setAssessmentName('Quick Assessment');
     assessment.setQuestionScore('60268600a5369fd7c2e0e19f', score1);
     assessment.setQuestionScore('6026876aa5369fd7c2e0e1a0', score2);
     console.log('score1', score1);
     console.log('score2', score2);
-
-    let res = await AssessmentAPI().putCompletedAssessment(assessment);
-    //let json = await res.json();
-    //console.log('json', res);
+    if (userId !== undefined) {
+      let res = await AssessmentAPI()
+        .putCompletedAssessment(assessment)
+        .then(props.navigation.navigate('Home'));
+    }
   };
 
   return (
-    <View>
+    <ScrollView>
       <TextInput
         multiline={true}
         numberOfLines={4}
@@ -136,7 +148,7 @@ const HomeQuiz = () => {
           post();
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
